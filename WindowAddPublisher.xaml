@@ -1,0 +1,20 @@
+﻿<Window x:Class="LibrISv2.WindowAddPublisher"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:LibrISv2"
+        mc:Ignorable="d"
+        Title="Добавить издательство" Height="230" Width="400"
+        FontFamily="Microsoft YaHei UI Light" FontSize="16">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <TextBox Grid.Row="0" Name="tbOGRN" Text="ОГРН" Foreground="LightSlateGray" GotFocus="tbOGRN_GotFocus" LostFocus="tbOGRN_LostFocus" ToolTip="13 цифр"/>
+        <TextBox Grid.Row="1" Name="tbName" Text="Название" Foreground="LightSlateGray" GotFocus="tbName_GotFocus" LostFocus="tbName_LostFocus"/>
+        <Button Grid.Row="2" Name="bAccept" Content="ДОБАВИТЬ" VerticalAlignment="Center" HorizontalAlignment="Center" Click="bAccept_Click"/>
+    </Grid>
+</Window>

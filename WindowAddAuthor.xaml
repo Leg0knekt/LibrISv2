@@ -1,0 +1,24 @@
+﻿<Window x:Class="LibrISv2.WindowAddAuthor"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:LibrISv2"
+        mc:Ignorable="d"
+        Title="Добавить автора" Height="400" Width="400"
+        FontFamily="Microsoft YaHei UI Light" FontSize="16">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <TextBox Grid.Row="0" Name="tbSurname" Text="Фамилия (если есть)" Foreground="LightSlateGray" GotFocus="tbSurname_GotFocus" LostFocus="tbSurname_LostFocus"/>
+        <TextBox Grid.Row="1" Name="tbName" Text="Имя или псевдоним" Foreground="LightSlateGray" GotFocus="tbName_GotFocus" LostFocus="tbName_LostFocus"/>
+        <TextBox Grid.Row="2" Name="tbPatronymic" Text="Отчество (если есть)" Foreground="LightSlateGray" GotFocus="tbPatronymic_GotFocus" LostFocus="tbPatronymic_LostFocus"/>
+        <TextBox Grid.Row="3" Name="tbPhoto" Text="Ссылка на фото (не обязательно)" Foreground="LightSlateGray" GotFocus="tbPhoto_GotFocus" LostFocus="tbPhoto_LostFocus"/>
+        <Button Grid.Row="4" Name="bAddAuthor" Content="ДОБАВИТЬ" VerticalAlignment="Center" HorizontalAlignment="Center" Click="bAddAuthor_Click"/>
+    </Grid>
+</Window>

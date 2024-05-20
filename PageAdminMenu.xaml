@@ -1,0 +1,29 @@
+﻿<Page x:Class="LibrISv2.PageAdminMenu"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:LibrISv2"
+      mc:Ignorable="d" 
+      d:DesignHeight="720" d:DesignWidth="1280"
+      Title="PageAdminMenu"
+      Background="{StaticResource _azure}"
+      FontFamily="Microsoft YaHei UI Light" FontSize="16">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Border Grid.Row="0" Grid.ColumnSpan="9" Background="{StaticResource _mintBlue}"/>
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Button Grid.Column="0" Name="bAddEmployee" Content="НОВЫЙ СОТРУДНИК" HorizontalAlignment="Right" Click="bAddEmployee_Click" Padding="10 20" Margin="10 0"/>
+            <Button Grid.Column="1" Name="bConnectionProperties" Content="НАСТРОЙКИ ПОДКЛЮЧЕНИЯ" HorizontalAlignment="Left" Click="bConnectionProperties_Click" Padding="10 20" Margin="10 0"/>
+        </Grid>
+        <Frame Grid.Row="1" Name="AdminMenuFrame" NavigationUIVisibility="Hidden" Source="PageNewEmployee.xaml"/>
+    </Grid>
+</Page>

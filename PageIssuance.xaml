@@ -1,0 +1,103 @@
+﻿<Page x:Class="LibrISv2.PageIssuance"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:LibrISv2"
+      mc:Ignorable="d" 
+      d:DesignHeight="720" d:DesignWidth="1280"
+      Title="PageIssuance"
+      Background="{StaticResource _azure}"
+      FontFamily="Microsoft YaHei UI Light" FontSize="16">
+    <Page.Resources>
+        <local:InitialsConverter x:Key="nameConverter"/>
+    </Page.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0.25*"/>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="0.5"/>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="0.25*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.5*"/>
+            <RowDefinition Height="4*"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <Label Grid.Row="0" Grid.Column="1" Content="Выбор печатного издания" VerticalAlignment="Bottom"/>
+        <Label Grid.Row="0" Grid.Column="3" Content="Выбор читателя" VerticalAlignment="Bottom"/>
+        <Grid Grid.Column="1" Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBox Grid.Column="0" Name="tbIssueFilter" Text="Найти" Foreground="LightSlateGray" GotFocus="tbIssueFilter_GotFocus" LostFocus="tbIssueFilter_LostFocus" TextChanged="tbIssueFilter_TextChanged"/>
+                <Button Grid.Column="1" Name="bCancelIssueFilter" Content="╳" FontSize="30" Margin="0 10 10 10" Padding="10 0" Click="bCancelIssueFilter_Click"/>
+            </Grid>
+            <ListView Grid.Row="2" Name="lvIssues" Margin="10" Padding="10" SelectionChanged="lvIssues_SelectionChanged" ItemsSource="{Binding}">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel>
+                            <TextBlock Text="{Binding Identifier}"/>
+                            <TextBlock Text="{Binding Name}"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </Grid>
+        <Border Grid.Column="2" Grid.Row="1" BorderThickness="0" Background="LightSlateGray" Margin="0 10"/>
+        <Grid Grid.Column="3" Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition/>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBox Grid.Column="0" Name="tbClientFilter" Text="Найти" Foreground="LightSlateGray" Margin="10" Padding="10" GotFocus="tbClientFilter_GotFocus" LostFocus="tbClientFilter_LostFocus" TextChanged="tbClientFilter_TextChanged"/>
+                <Button Grid.Column="1" Name="bCancelClientFilter" Content="╳" FontSize="30" Margin="0 10 10 10" Padding="10 0" Click="bCancelClientFilter_Click"/>
+            </Grid>
+            <ListView Grid.Row="1" Name="lvClients" Margin="10" Padding="10" SelectionChanged="lvClients_SelectionChanged">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="1*" MinWidth="380"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Text="{Binding LibCard}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0 0 10 0"/>
+                            <Grid Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10 0">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="auto"/>
+                                    <RowDefinition Height="auto"/>
+                                </Grid.RowDefinitions>
+                                <TextBlock Grid.Row="0">
+                                    <Run Text="{Binding Surname}"/>
+                                    <Run Text="{Binding FirstName, Converter={StaticResource nameConverter}}"/>
+                                    <Run Text="{Binding Patronymic, Converter={StaticResource nameConverter}}"/>
+                                </TextBlock>
+                                <TextBlock Grid.Row="1" Text="{Binding Phone}" FontSize="14"/>
+                            </Grid>
+                            <TextBlock Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="10 0 0 0">
+                                <Run Text="{Binding BirthYear}"/>
+                                <Run Text="г.р."/>
+                            </TextBlock>
+                        </Grid>
+
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+            <Button Grid.Row="3" Name="bNextStep" Content="ДАЛЕЕ" Margin="10" Padding="10" HorizontalAlignment="Center" Click="bNextStep_Click"/>
+        </Grid>
+    </Grid>
+</Page>

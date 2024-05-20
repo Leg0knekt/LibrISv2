@@ -1,0 +1,139 @@
+﻿<Page x:Class="LibrISv2.PageAddIssue"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:LibrISv2"
+      mc:Ignorable="d" 
+      d:DesignHeight="720" d:DesignWidth="1280"
+      Title="PageAddIssue"
+      Background="{StaticResource _azure}"
+      FontFamily="Microsoft YaHei UI Light" FontSize="16">
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0.25*"/>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="0.25*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.25*"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <TextBox Grid.Column="2" Grid.Row="1" Name="tbID" GotFocus="tbID_GotFocus" LostFocus="tbID_LostFocus" Text="ISBN / ISSN" Foreground="LightSlateGray"/>
+        <TextBox Grid.Column="2" Grid.Row="2" Name="tbName" GotFocus="tbName_GotFocus" LostFocus="tbName_LostFocus" Text="Наименование" Foreground="LightSlateGray"/>
+        <TextBox Grid.Column="2" Grid.Row="7" Name="tbImage" GotFocus="tbImage_GotFocus" LostFocus="tbImage_LostFocus" Text="Ссылка на изображение" Foreground="LightSlateGray" VerticalAlignment="Top"/>
+        <Grid Grid.Column="2" Grid.Row="3" HorizontalAlignment="Stretch">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="auto"/>
+            </Grid.ColumnDefinitions>
+            <ComboBox VerticalContentAlignment="Center" Name="cbPublisher" SelectionChanged="cbPublisher_SelectionChanged">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Name}"/>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+            <Button Grid.Column="1" Content="+" Name="bAddPublisher" Margin="10 0 10 2" Padding="10 0 10 1" FontSize="30" ToolTip="Добавить издательство"
+            VerticalAlignment="Center" HorizontalAlignment="Center" VerticalContentAlignment="Top" Click="bAddPublisher_Click"/>
+        </Grid>
+        <TextBlock Grid.Column="2" Grid.Row="3" Name="tbPubTip" Margin="10" Padding="10" VerticalAlignment="Center" HorizontalAlignment="Left" 
+           Text="Издательство" Background="Transparent" Foreground="LightSlateGray"/>
+
+        <ComboBox Grid.Column="4" Grid.Row="1" Margin="10" Padding="10" VerticalContentAlignment="Center" Name="cbType" SelectionChanged="cbType_SelectionChanged">
+            <ComboBox.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding Type}"/>
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+        </ComboBox>
+        <TextBlock Grid.Column="4" Grid.Row="1" Name="tbTypeTip" Margin="10" Padding="10" VerticalAlignment="Center" HorizontalAlignment="Left" 
+           Text="Тип издания" Background="Transparent" Foreground="LightSlateGray"/>
+
+        <Grid Grid.Column="2" Grid.Row="4">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <TextBox Grid.Column="0" Name="tbYear" GotFocus="tbYear_GotFocus" LostFocus="tbYear_LostFocus" Text="Год издания" Foreground="LightSlateGray"/>
+            <TextBox Grid.Column="2" Name="tbPageNum" GotFocus="tbPageNum_GotFocus" LostFocus="tbPageNum_LostFocus" Text="Кол-во страниц" Foreground="LightSlateGray"/>
+        </Grid>
+        <Grid Grid.Column="2" Grid.Row="5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <ComboBox Grid.Column="0" Margin="10" Padding="10" VerticalContentAlignment="Center" Name="cbBBK" SelectionChanged="cbBBK_SelectionChanged">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock>
+                    <Run Text="{Binding Index}"/>
+                    <Run Text="{Binding Industry}"/>
+                        </TextBlock>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+            <TextBlock Grid.Column="0" Name="tbBBKTip" Margin="10" Padding="10" VerticalAlignment="Center" HorizontalAlignment="Left" 
+               Text="ББК" Background="Transparent" Foreground="LightSlateGray"/>
+            <ComboBox Grid.Column="1" Margin="10" Padding="10" VerticalContentAlignment="Center" Name="cbUDK" SelectionChanged="cbUDK_SelectionChanged">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock>
+                    <Run Text="{Binding Index}"/>
+                    <Run Text="{Binding Industry}"/>
+                        </TextBlock>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+            <TextBlock Grid.Column="1" Name="tbUDKTip" Margin="10" Padding="10" VerticalAlignment="Center" HorizontalAlignment="Left" 
+               Text="УДК" Background="Transparent" Foreground="LightSlateGray"/>
+        </Grid>
+        <Grid Grid.Column="2" Grid.Row="6">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <TextBox Grid.Column="0" Name="tbSign" Text="Авторский знак" Foreground="LightSlateGray" GotFocus="tbSign_GotFocus" LostFocus="tbSign_LostFocus"/>
+            <TextBox Grid.Column="2" Name="tbAmount" Text="В наличии" Foreground="LightSlateGray" GotFocus="tbAmount_GotFocus" LostFocus="tbAmount_LostFocus"/>
+        </Grid>
+        <Grid Grid.Column="4" Grid.Row="6">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="auto"/>
+            </Grid.ColumnDefinitions>
+            <TextBox Grid.Column="0" Name="tbFilter" Text="Найти автора" Foreground="LightSlateGray" GotFocus="tbFilter_GotFocus" LostFocus="tbFilter_LostFocus" TextChanged="tbFilter_TextChanged"/>
+            <Button Grid.Column="1" Content="╳" Name="bCancelFilter" Padding="10 0" FontSize="30" Click="bCancelFilter_Click" ToolTip="Сбросить фильтр"/>
+            <Button Grid.Column="2" Content="+" Name="bAddAuthor" Padding="10 0 10 4" FontSize="30" Click="bAddAuthor_Click" ToolTip="Добавить нового автора"/>
+        </Grid>
+
+        <ListView Grid.Column="4" Grid.Row="2" Grid.RowSpan="4" Margin="10" Padding="10" Name="lvAuthors" IsEnabled="False" Height="225" ScrollViewer.CanContentScroll="True"
+          SelectionMode="Multiple"  SelectionChanged="lvAuthors_SelectionChanged" ItemsSource="{Binding}">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock>
+                    <Run Text="{Binding Surname}"/>
+                    <Run Text="{Binding FirstName}"/>
+                    <Run Text="{Binding Patronymic}"/>
+                    </TextBlock>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+
+        <Button Grid.Column="4" Grid.Row="7" Padding="10" Name="bClear" Content="ОЧИСТИТЬ" VerticalAlignment="Top" HorizontalAlignment="Left" 
+        ToolTip="Очистить все поля" BorderThickness="0" Click="bClear_Click"/>
+        <Button Grid.Column="4" Grid.Row="7" Padding="10" Name="bAdd" Content="ДОБАВИТЬ" VerticalAlignment="Top" HorizontalAlignment="Right" 
+        ToolTip="Создать запись в базе" BorderThickness="0" Click="bAdd_Click"/>
+    </Grid>
+</Page>

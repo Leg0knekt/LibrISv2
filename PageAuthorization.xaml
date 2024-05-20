@@ -1,0 +1,40 @@
+﻿<Page x:Class="LibrISv2.PageAuthorization"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:LibrISv2"
+      mc:Ignorable="d" 
+      d:DesignHeight="720" d:DesignWidth="1280"
+      MinHeight="600" MinWidth="800"
+      Title="PageAuthorization"
+      Background="{StaticResource _azure}"
+      FontFamily="Microsoft YaHei UI Light" FontSize="16">
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Column="1" Grid.Row="1" VerticalAlignment="Bottom">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+            <TextBox Grid.Row="0" Name="tbLogin" Text="Логин" Foreground="LightSlateGray" GotFocus="tbLogin_GotFocus" LostFocus="tbLogin_LostFocus"/>
+            <PasswordBox Grid.Row="1" Name="tbPassword" GotFocus="tbPassword_GotFocus" LostFocus="tbPassword_LostFocus"/>
+            <TextBlock Grid.Row="1" Name="tbPassTip" Margin="10 10 0 10" Padding="10 0 0 0" VerticalAlignment="Center" HorizontalAlignment="Left" Text="Пароль" Foreground="LightSlateGray"/>
+            <Button Grid.Row="2" Name="bLogIn" Content="ВОЙТИ"  Width="100px" Click="bLogIn_Click" Padding="10"/>
+        </Grid>
+        <Button Grid.Column="2" Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Top" Content="Маяковка. Админ" Name="bTestAuth" Click="bTestAuth_Click"/>
+        <Button Grid.Column="2" Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Center" Content="Маяковка. Худ." Name="bTestAuth2" Click="bTestAuth2_Click"/>
+    </Grid>
+</Page>
