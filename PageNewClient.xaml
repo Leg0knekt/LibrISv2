@@ -85,7 +85,6 @@
                             <Run Text="г.р."/>
                         </TextBlock>
                     </Grid>
-
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>

@@ -30,6 +30,7 @@ namespace LibrISv2
         public MainWindow()
         {
             InitializeComponent();
+            currentUserWorkplace = 0;
             greetingsText = tGreetings;
             greetingsBlock = panelGreetings;
             DataContext = this;
@@ -92,14 +93,16 @@ namespace LibrISv2
         }
         private void bLogOut_Click(object sender, RoutedEventArgs e)
         {
+            AppFrame.Navigate(PageControl.PageAddIssue);
+            PageControl.pIssuance = null;
             if (greetingsText != null && greetingsBlock != null)
             {
                 greetingsText.Text = "";
                 greetingsBlock.Visibility = Visibility.Hidden;
             }
             else return;
-            currentLibrary = null;
             currentUserWorkplace = 0;
+            currentLibrary = null;
             PageControl.PageAuth.tbLogin.Text = "Логин";
             PageControl.PageAuth.tbLogin.Foreground = Brushes.LightSlateGray;
             PageControl.PageAuth.tbPassword.Password = string.Empty;
@@ -143,6 +146,10 @@ namespace LibrISv2
                 NpgsqlCommand cmdLvL2 = DBControl.GetCommand("INSERT INTO \"Department\" (code, organization, name) VALUES (1, '1024500521066', 'Администрирования')");
                 cmdLvL2.ExecuteNonQuery();
                 cmdLvL2 = DBControl.GetCommand("INSERT INTO \"Department\" (code, organization, name) VALUES (2, '1024500521066', 'Художественной литературы')");
+                cmdLvL2.ExecuteNonQuery();
+                cmdLvL2 = DBControl.GetCommand("INSERT INTO \"Department\" (code, organization, name) VALUES (3, '1024500521066', 'Отраслевой литературы')");
+                cmdLvL2.ExecuteNonQuery();
+                cmdLvL2 = DBControl.GetCommand("INSERT INTO \"Department\" (code, organization, name) VALUES (4, '1024500521066', 'Краеведческой литературы')");
                 cmdLvL2.ExecuteNonQuery();
             }
             else reader.Close();
@@ -195,6 +202,34 @@ namespace LibrISv2
                     MessageBox.Show("Ошибочка вышла");
                     return;
                 }
+
+                cmdLvL2 = DBControl.GetCommand("INSERT INTO \"Employee\" (\"TIN\", surname, firstname, patronymic, phone, workplace, position, role, login, hashedpass, salt) " +
+                                                             "VALUES ('450743882234', 'Грачева', 'Ольга', 'Павловна', '+7(906)673-11-21', 3, 'Руководитель', " +
+                                                                     "'Сотрудник библиотечного фонда', 'GrOP21', @pass, 'a30d')");
+                try
+                {
+                    cmdLvL2.Parameters.AddWithValue("@pass", NpgsqlDbType.Varchar, PasswordGeneration.GenerateHash("08xa521N", "a30d"));
+                    cmdLvL2.ExecuteNonQuery();
+                }
+                catch
+                {
+                    MessageBox.Show("Ошибочка вышла");
+                    return;
+                }
+
+                cmdLvL2 = DBControl.GetCommand("INSERT INTO \"Employee\" (\"TIN\", surname, firstname, patronymic, phone, workplace, position, role, login, hashedpass, salt) " +
+                                                             "VALUES ('450743993345', 'Феоктистова', 'Анна', 'Сергеевна', '+7(909)128-65-65', 4, 'Руководитель', " +
+                                                                     "'Сотрудник библиотечного фонда', 'FAnS71', @pass, 'o9x4')");
+                try
+                {
+                    cmdLvL2.Parameters.AddWithValue("@pass", NpgsqlDbType.Varchar, PasswordGeneration.GenerateHash("XArnYeav", "o9x4"));
+                    cmdLvL2.ExecuteNonQuery();
+                }
+                catch
+                {
+                    MessageBox.Show("Ошибочка вышла");
+                    return;
+                }
             }
             else reader.Close();
         }
@@ -219,11 +254,17 @@ namespace LibrISv2
             if (!reader.HasRows)
             {
                 reader.Close();
-                NpgsqlCommand cmdLvL2 = DBControl.GetCommand("INSERT INTO \"LibraryClassification\" (index, industry) VALUES ('84(2)4', 'Древнерусская (IX - XVIII вв.)')");
+                NpgsqlCommand cmdLvL2 = DBControl.GetCommand("INSERT INTO \"LibraryClassification\" (index, industry) VALUES ('84(2)', 'Литература России')");
                 cmdLvL2.ExecuteNonQuery();
-                cmdLvL2 = DBControl.GetCommand("INSERT INTO \"LibraryClassification\" (index, industry) VALUES ('84(2)5', 'Новое время (XVIII в. - 1917 г.)')");
+                cmdLvL2 = DBControl.GetCommand("INSERT INTO \"LibraryClassification\" (index, industry) VALUES ('84(4)', 'Литература Европы')");
                 cmdLvL2.ExecuteNonQuery();
-                cmdLvL2 = DBControl.GetCommand("INSERT INTO \"LibraryClassification\" (index, industry) VALUES ('84(2)6', 'Новейшее время (с октября 1917 г.)')");
+                cmdLvL2 = DBControl.GetCommand("INSERT INTO \"LibraryClassification\" (index, industry) VALUES ('84(6)', 'Литература Африки')");
+                cmdLvL2.ExecuteNonQuery();
+                cmdLvL2 = DBControl.GetCommand("INSERT INTO \"LibraryClassification\" (index, industry) VALUES ('81.411.2-4', 'Русский язык. Словари')");
+                cmdLvL2.ExecuteNonQuery();
+                cmdLvL2 = DBControl.GetCommand("INSERT INTO \"LibraryClassification\" (index, industry) VALUES ('65.32', 'Экономика сельского хозяйства')");
+                cmdLvL2.ExecuteNonQuery();
+                cmdLvL2 = DBControl.GetCommand("INSERT INTO \"LibraryClassification\" (index, industry) VALUES ('84(5)', 'Литература Азии')");
                 cmdLvL2.ExecuteNonQuery();
             }
             else reader.Close();
@@ -238,6 +279,16 @@ namespace LibrISv2
                 NpgsqlCommand cmdLvL2 = DBControl.GetCommand("INSERT INTO \"DecimalClassification\" (index, industry) VALUES ('82-1', 'Поэзия. Стихи, оды, поэмы, баллады и т.д.')");
                 cmdLvL2.ExecuteNonQuery();
                 cmdLvL2 = DBControl.GetCommand("INSERT INTO \"DecimalClassification\" (index, industry) VALUES ('82-3', 'Художественная проза. Роман, новелла, рассказ и т.д.')");
+                cmdLvL2.ExecuteNonQuery();
+                cmdLvL2 = DBControl.GetCommand("INSERT INTO \"DecimalClassification\" (index, industry) VALUES ('82-2', 'Драматургия. Пьесы, либретто, сценарии')");
+                cmdLvL2.ExecuteNonQuery();
+                cmdLvL2 = DBControl.GetCommand("INSERT INTO \"DecimalClassification\" (index, industry) VALUES ('82-4', 'Очерки, эссе')");
+                cmdLvL2.ExecuteNonQuery();
+                cmdLvL2 = DBControl.GetCommand("INSERT INTO \"DecimalClassification\" (index, industry) VALUES ('82-9', 'Прочие литературные жанры')");
+                cmdLvL2.ExecuteNonQuery();
+                cmdLvL2 = DBControl.GetCommand("INSERT INTO \"DecimalClassification\" (index, industry) VALUES ('332', 'Территориальная экономика. Аграрный вопрос. Жилищное хозяйство')");
+                cmdLvL2.ExecuteNonQuery();
+                cmdLvL2 = DBControl.GetCommand("INSERT INTO \"DecimalClassification\" (index, industry) VALUES ('811', 'Языки естественные и искусственные')");
                 cmdLvL2.ExecuteNonQuery();
             }
             else reader.Close();
@@ -255,6 +306,18 @@ namespace LibrISv2
                 cmdLvL2.ExecuteNonQuery();
                 cmdLvL2 = DBControl.GetCommand("INSERT INTO \"Publisher\" (\"OGRN\", name) VALUES ('1027739148656', 'Эксмо')");
                 cmdLvL2.ExecuteNonQuery();
+                cmdLvL2 = DBControl.GetCommand("INSERT INTO \"Publisher\" (\"OGRN\", name) VALUES ('1077761055460', 'ИСТАРИ КОМИКС')");
+                cmdLvL2.ExecuteNonQuery();
+                cmdLvL2 = DBControl.GetCommand("INSERT INTO \"Publisher\" (\"OGRN\", name) VALUES ('1147746296532', 'ПРОСВЕЩЕНИЕ')");
+                cmdLvL2.ExecuteNonQuery();
+                cmdLvL2 = DBControl.GetCommand("INSERT INTO \"Publisher\" (\"OGRN\", name) VALUES ('1157746848478', 'РОСМЭН')");
+                cmdLvL2.ExecuteNonQuery();
+                cmdLvL2 = DBControl.GetCommand("INSERT INTO \"Publisher\" (\"OGRN\", name) VALUES ('1022201769721', 'АЛТАПРЕСС')");
+                cmdLvL2.ExecuteNonQuery();
+                cmdLvL2 = DBControl.GetCommand("INSERT INTO \"Publisher\" (\"OGRN\", name) VALUES ('1147746712651', 'Bubble Comics')");
+                cmdLvL2.ExecuteNonQuery();
+                cmdLvL2 = DBControl.GetCommand("INSERT INTO \"Publisher\" (\"OGRN\", name) VALUES ('1203600007401', 'РЕАНИМЕДИА ПАБЛИШИНГ')");
+                cmdLvL2.ExecuteNonQuery();
             }
             else reader.Close();
         }
@@ -268,6 +331,18 @@ namespace LibrISv2
                 NpgsqlCommand cmdLvL2 = DBControl.GetCommand("INSERT INTO \"Author\" (code, surname, firstname, patronymic, photo) " +
                                                              "VALUES (1, 'Лермонтов', 'Михаил', 'Юрьевич', '/pic/no_image.png')");
                 cmdLvL2.ExecuteNonQuery();
+                cmdLvL2 = DBControl.GetCommand("INSERT INTO \"Author\" (code, surname, firstname, patronymic, photo) " +
+                                                             "VALUES (2, 'Акутами', 'Гэгэ', '', '/pic/no_image.png')");
+                cmdLvL2.ExecuteNonQuery();
+                cmdLvL2 = DBControl.GetCommand("INSERT INTO \"Author\" (code, surname, firstname, patronymic, photo) " +
+                                                             "VALUES (3, 'Бархударов', 'Степан', 'Григорьевич', '/pic/no_image.png')");
+                cmdLvL2.ExecuteNonQuery();
+                cmdLvL2 = DBControl.GetCommand("INSERT INTO \"Author\" (code, surname, firstname, patronymic, photo) " +
+                                                             "VALUES (4, 'Кузнецова', 'Надежда', 'Анатольевна', '/pic/no_image.png')");
+                cmdLvL2.ExecuteNonQuery();
+                cmdLvL2 = DBControl.GetCommand("INSERT INTO \"Author\" (code, surname, firstname, patronymic, photo) " +
+                                                             "VALUES (5, 'Сапковский', 'Анджей', '', '/pic/no_image.png')");
+                cmdLvL2.ExecuteNonQuery();
             }
             else reader.Close();
         }
@@ -280,8 +355,38 @@ namespace LibrISv2
                 reader.Close();
                 NpgsqlCommand cmdLvL2 = DBControl.GetCommand("INSERT INTO \"Issue\" (identifier, name, type, \"BBK\", \"UDK\", year, publisher, pagecount, storage, " +
                                                                                     "amount, annotation, image, keyword, authorsign) " +
-                                                             "VALUES ('978-5-87-107963-8', 'Демон', 'Книжное', '84(2)5', '82-3', 2015, '5077746791634', 352, 2, " +
+                                                             "VALUES ('978-5-87-107963-8', 'Демон', 'Книжное', '84(2)', '82-3', 2015, '1117746849648', 352, 2, " +
                                                                       "6, '', '/pic/no_image.png', '', 'Л32')");
+                cmdLvL2.ExecuteNonQuery();
+
+                cmdLvL2 = DBControl.GetCommand("INSERT INTO \"Issue\" (identifier, name, type, \"BBK\", \"UDK\", year, publisher, pagecount, storage, " +
+                                                                                    "amount, annotation, image, keyword, authorsign) " +
+                                                             "VALUES ('978-5-389-22224-3', 'Таланты умирают молодыми', 'Книжное', '84(5)', '82-9', 2023, '5077746791634', 127, " +
+                                                             "2, 1, '', '/pic/no_image.png', '', 'А77')");
+                cmdLvL2.ExecuteNonQuery();
+
+                cmdLvL2 = DBControl.GetCommand("INSERT INTO \"Issue\" (identifier, name, type, \"BBK\", \"UDK\", year, publisher, pagecount, storage, " +
+                                                                                    "amount, annotation, image, keyword, authorsign) " +
+                                                             "VALUES ('978-5-389-24137-4', 'Перелётный гусь', 'Книжное', '84(5)', '82-9', 2023, '5077746791634', 119, " +
+                                                             "2, 1, '', '/pic/no_image.png', '', 'А77')");
+                cmdLvL2.ExecuteNonQuery();
+
+                cmdLvL2 = DBControl.GetCommand("INSERT INTO \"Issue\" (identifier, name, type, \"BBK\", \"UDK\", year, publisher, pagecount, storage, " +
+                                                                                    "amount, annotation, image, keyword, authorsign) " +
+                                                             "VALUES ('978-5-389-22224-2', 'В преддверии праздника', 'Книжное', '84(5)', '82-9', 2023, '5077746791634', 122, " +
+                                                             "2, 2, '', '/pic/no_image.png', '', 'А77')");
+                cmdLvL2.ExecuteNonQuery();
+
+                cmdLvL2 = DBControl.GetCommand("INSERT INTO \"Issue\" (identifier, name, type, \"BBK\", \"UDK\", year, publisher, pagecount, storage, " +
+                                                                                    "amount, annotation, image, keyword, authorsign) " +
+                                                             "VALUES ('978-5-488-01677-4', 'Орфографический словарь русского языка: 106000 слов', 'Книжное', '81.411.2-4', '811', 2004, '1147746296532', 478, " +
+                                                             "3, 12, '', '/pic/no_image.png', '', 'Б49')");
+                cmdLvL2.ExecuteNonQuery();
+
+                cmdLvL2 = DBControl.GetCommand("INSERT INTO \"Issue\" (identifier, name, type, \"BBK\", \"UDK\", year, publisher, pagecount, storage, " +
+                                                                                    "amount, annotation, image, keyword, authorsign) " +
+                                                             "VALUES ('978-5-117-06232-4', 'Развитие системы сельскохозяйственных потребительских кооперативов', 'Книжное', '65.32', '332', 2004, '1022201769721', 99, " +
+                                                             "4, 3, '', '/pic/no_image.png', '', 'К37')");
                 cmdLvL2.ExecuteNonQuery();
             }
             else reader.Close();
@@ -294,6 +399,16 @@ namespace LibrISv2
             {
                 reader.Close();
                 NpgsqlCommand cmdLvL2 = DBControl.GetCommand("INSERT INTO \"Authorship\" (issue, author) VALUES ('978-5-87-107963-8', 1)");
+                cmdLvL2.ExecuteNonQuery();
+                cmdLvL2 = DBControl.GetCommand("INSERT INTO \"Authorship\" (issue, author) VALUES ('978-5-389-22224-3', 2)");
+                cmdLvL2.ExecuteNonQuery();
+                cmdLvL2 = DBControl.GetCommand("INSERT INTO \"Authorship\" (issue, author) VALUES ('978-5-389-24137-4', 2)");
+                cmdLvL2.ExecuteNonQuery();
+                cmdLvL2 = DBControl.GetCommand("INSERT INTO \"Authorship\" (issue, author) VALUES ('978-5-389-22224-2', 2)");
+                cmdLvL2.ExecuteNonQuery();
+                cmdLvL2 = DBControl.GetCommand("INSERT INTO \"Authorship\" (issue, author) VALUES ('978-5-488-01677-4', 3)");
+                cmdLvL2.ExecuteNonQuery();
+                cmdLvL2 = DBControl.GetCommand("INSERT INTO \"Authorship\" (issue, author) VALUES ('978-5-117-06232-4', 4)");
                 cmdLvL2.ExecuteNonQuery();
             }
             else reader.Close();
@@ -311,6 +426,8 @@ namespace LibrISv2
                 cmdLvL2.ExecuteNonQuery();
                 cmdLvL2 = DBControl.GetCommand("INSERT INTO \"SocialStatus\" (status) VALUES ('Пенсионер')");
                 cmdLvL2.ExecuteNonQuery();
+                cmdLvL2 = DBControl.GetCommand("INSERT INTO \"SocialStatus\" (status) VALUES ('Нетрудоустроенный')");
+                cmdLvL2.ExecuteNonQuery();
             }
             else reader.Close();
         }
@@ -323,6 +440,22 @@ namespace LibrISv2
                 reader.Close();
                 NpgsqlCommand cmdLvL2 = DBControl.GetCommand("INSERT INTO \"Client\" (libcard, surname, firstname, patronymic, phone, socialstatus, debt, birthyear) " +
                                                              "VALUES ('132057', 'Иванчук', 'Софья', 'Андреевна', '+7(908)941-07-07', 'Учащийся', false, 2000)");
+                cmdLvL2.ExecuteNonQuery();
+
+                cmdLvL2 = DBControl.GetCommand("INSERT INTO \"Client\" (libcard, surname, firstname, patronymic, phone, socialstatus, debt, birthyear) " +
+                                                             "VALUES ('132058', 'Бабаев', 'Анатолий', 'Игоревич', '+7(906)111-82-23', 'Пенсионер', false, 1961)");
+                cmdLvL2.ExecuteNonQuery();
+
+                cmdLvL2 = DBControl.GetCommand("INSERT INTO \"Client\" (libcard, surname, firstname, patronymic, phone, socialstatus, debt, birthyear) " +
+                                                             "VALUES ('132059', 'Файзрахманова', 'Екатерина', 'Васильевна', '+7(900)654-32-74', 'Трудящийся', false, 1994)");
+                cmdLvL2.ExecuteNonQuery();
+
+                cmdLvL2 = DBControl.GetCommand("INSERT INTO \"Client\" (libcard, surname, firstname, patronymic, phone, socialstatus, debt, birthyear) " +
+                                                             "VALUES ('132060', 'Гарина', 'Галина', 'Андреевна', '+7(912)672-10-23', 'Пенсионер', false, 1957)");
+                cmdLvL2.ExecuteNonQuery();
+
+                cmdLvL2 = DBControl.GetCommand("INSERT INTO \"Client\" (libcard, surname, firstname, patronymic, phone, socialstatus, debt, birthyear) " +
+                                                             "VALUES ('132061', 'Кижичев', 'Олег', 'Витальевич', '+7(902)105-05-62', 'Учащийся', false, 2005)");
                 cmdLvL2.ExecuteNonQuery();
             }
             else reader.Close();

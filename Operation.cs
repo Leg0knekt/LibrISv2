@@ -8,7 +8,8 @@ namespace LibrISv2
 {
     public class Operation
     {
-        public Operation(int id, string client, string issue, string status, DateTime issuance, DateTime returningDate)
+        public Operation(int id, string client, string issue, string status, DateTime issuance, DateTime returningDate, 
+                         string extraClient, string extraPhone, string extraBook, string extraStatus)
         {
             Id = id;
             Client = client;
@@ -16,12 +17,20 @@ namespace LibrISv2
             Status = status;
             Issuance = issuance;
             ReturningDate = returningDate;
+            ExtraClient = extraClient;
+            ExtraPhone = extraPhone;
+            ExtraBook = extraBook;
+            ExtraStatus = extraStatus;
         }
         public int Id { get; set; }
         public string Client { get; set; }
         public string Issue { get; set; }
         public string Status { get; set; }
         public DateTime Issuance { get; set; }
-        public DateTime? ReturningDate { get; set; }
+        public DateTime ReturningDate { get; set; }
+        public string ExtraClient { get; set; }
+        public string ExtraPhone {  get; set; }
+        public string ExtraBook { get; set; }
+        public string ExtraStatus { get; set; }
     }
 }

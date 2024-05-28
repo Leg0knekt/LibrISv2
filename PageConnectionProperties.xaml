@@ -35,7 +35,7 @@
                 <TextBox Name="tbPort" Foreground="LightSlateGray" GotFocus="tbPort_GotFocus" LostFocus="tbPort_LostFocus" Margin="10 0 10 10"/>
             </StackPanel>
             <StackPanel Grid.Row="3">
-                <TextBlock Text="Имя пользователя БД" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="20 0 0 0" FontSize="12" Foreground="{StaticResource _dark}"/>
+                <TextBlock Text="Имя пользователя базы данных" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="20 0 0 0" FontSize="12" Foreground="{StaticResource _dark}"/>
                 <TextBox Name="tbUsername" Foreground="LightSlateGray" GotFocus="tbUsername_GotFocus" LostFocus="tbUsername_LostFocus" Margin="10 0 10 10"/>
             </StackPanel>
             <StackPanel Grid.Row="4">
@@ -43,7 +43,7 @@
                 <TextBox Name="tbDatabase" Foreground="LightSlateGray" GotFocus="tbDatabase_GotFocus" LostFocus="tbDatabase_LostFocus" Margin="10 0 10 10"/>
             </StackPanel>
             <StackPanel Grid.Row="5">
-                <TextBlock Text="Порт" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="20 0 0 0" FontSize="12" Foreground="{StaticResource _dark}"/>
+                <TextBlock Text="Пароль базы данных" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="20 0 0 0" FontSize="12" Foreground="{StaticResource _dark}"/>
                 <TextBox Name="tbPassword" Foreground="LightSlateGray" GotFocus="tbPassword_GotFocus" LostFocus="tbPassword_LostFocus" Margin="10 0 10 10"/>
             </StackPanel>
             <Button Grid.Row="6" Name="bChangeProperties" Content="ПРИНЯТЬ" Click="bChangeProperties_Click" HorizontalAlignment="Center" VerticalAlignment="Top"/>

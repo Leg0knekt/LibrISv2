@@ -42,8 +42,8 @@ namespace LibrISv2
         public static ObservableCollection<IssueType> IssueTypes { get; set; } = new ObservableCollection<IssueType>();
         //public static ObservableCollection<Library> libraries { get; set; } = new ObservableCollection<Library>();
         public static ObservableCollection<LibraryClassification> LibClassifications { get; set; } = new ObservableCollection<LibraryClassification>();
-        //public static ObservableCollection<Operation> operations { get; set; } = new ObservableCollection<Operation>();
-        //public static ObservableCollection<OperationStatus> operationStatuses { get; set; } = new ObservableCollection<OperationStatus>();
+        public static ObservableCollection<Operation> Operations { get; set; } = new ObservableCollection<Operation>();
+        public static ObservableCollection<OperationStatus> OperationStatuses { get; set; } = new ObservableCollection<OperationStatus>();
         public static ObservableCollection<Publisher> Publishers { get; set; } = new ObservableCollection<Publisher>();
         public static ObservableCollection<Role> Roles { get; set; } = new ObservableCollection<Role>();
         public static ObservableCollection<SocialStatus> SocialStatuses { get; set; } = new ObservableCollection<SocialStatus>();

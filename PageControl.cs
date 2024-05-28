@@ -8,17 +8,17 @@ namespace LibrISv2
 {
     public class PageControl
     {
-        private static PageAddIssue pAddIssue;
-        private static PageAdminMenu pAdminMenu;
-        private static PageAuthorization pAuth;
-        private static PageCatalog pCatalog;
-        private static PageConnectionProperties pConnectionProperties;
-        private static PageDebtors pDebtors;
-        private static PageEmployeeMenu pEmployeeMenu;
-        private static PageIssuance pIssuance;
-        private static PageNewClient pNewClient;
-        private static PageNewEmployee pNewEmployee;
-        private static PageReservationView pReservationView;
+        public static PageAddIssue pAddIssue;
+        public static PageAdminMenu pAdminMenu;
+        public static PageAuthorization pAuth;
+        public static PageCatalog pCatalog;
+        public static PageConnectionProperties pConnectionProperties;
+        public static PageDebtors pDebtors;
+        public static PageEmployeeMenu pEmployeeMenu;
+        public static PageIssuance pIssuance;
+        public static PageNewClient pNewClient;
+        public static PageNewEmployee pNewEmployee;
+        public static PageReservationView pReservationView;
         public static PageAddIssue PageAddIssue
         {
             get

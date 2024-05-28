@@ -28,35 +28,30 @@
                 <ColumnDefinition Width="2*"/>
             </Grid.ColumnDefinitions>
             <Border Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="9" Background="{StaticResource _mintBlue}"/>
-            <Border Name="borderBack" Grid.Column="0" BorderThickness="0" Background="{StaticResource _mintBlue}" HorizontalAlignment="Right">
-                <Button HorizontalAlignment="Right" VerticalAlignment="Center"
-                Grid.Column="0" Name="bBack" Content="НАЗАД" BorderThickness="0" 
-                Click="bBack_Click" Visibility="Hidden"/>
-            </Border>
             <Button HorizontalAlignment="Center" VerticalAlignment="Center" 
             Grid.Column="2" Name="bAddIssue" Content="ДОБАВЛЕНИЕ" 
             BorderThickness="0"  
-            Click="bAddIssue_Click"/>
+            Click="bAddIssue_Click" Margin="10 0"/>
             <Button HorizontalAlignment="Center" VerticalAlignment="Center"
             Grid.Column="3" Name="bSortIssue" Content="В РАЗРАБОТКЕ" 
             BorderThickness="0" 
-            Click="bSortIssue_Click"/>
+            Click="bSortIssue_Click" Margin="10 0"/>
             <Button HorizontalAlignment="Center" VerticalAlignment="Center" 
             Grid.Column="4" Name="bIssuance" Content="ВЫДАЧА" 
             BorderThickness="0" 
-            Click="bIssuance_Click"/>
+            Click="bIssuance_Click" Margin="10 0"/>
             <Button HorizontalAlignment="Center" VerticalAlignment="Center" 
             Grid.Column="5" Name="bReserved" Content="В РАЗРАБОТКЕ" 
             BorderThickness="0" 
-            Click="bReserved_Click"/>
+            Click="bReserved_Click" Margin="10 0"/>
             <Button HorizontalAlignment="Center" VerticalAlignment="Center" 
             Grid.Column="6" Name="bNewClient" Content="ЧИТАТЕЛИ" 
             BorderThickness="0" 
-            Click="bNewClient_Click"/>
+            Click="bNewClient_Click" Margin="10 0"/>
             <Button HorizontalAlignment="Center" VerticalAlignment="Center" 
-            Grid.Column="7" Name="bDebtors" Content="В РАЗРАБОТКЕ" 
+            Grid.Column="7" Name="bDebtors" Content="ВЫДАННЫЕ" 
             BorderThickness="0"  
-            Click="bDebtors_Click"/>
+            Click="bDebtors_Click" Margin="10 0"/>
         </Grid>
         <Frame Grid.Row="1" Name="MenuFrame" NavigationUIVisibility="Hidden" Source="PageAddIssue.xaml"/>
     </Grid>

@@ -45,12 +45,14 @@ namespace LibrISv2
                 reader.Close();
                 NpgsqlCommand command = DBControl.GetCommand("INSERT INTO \"Client\" (libcard, surname, firstname, patronymic, phone, socialstatus, debt, birthyear)" +
                                                              "VALUES (@libcard, @surname, @firstname, @patronymic, @phone, @socialstatus, @debt, @birthyear)");
+                string patr = "";
+                if (tbPatronymic.Text != "Отчество (если есть)") { patr = tbPatronymic.Text; }
                 try
                 {
                     command.Parameters.AddWithValue("@libcard", NpgsqlDbType.Varchar, libcard);
                     command.Parameters.AddWithValue("@surname", NpgsqlDbType.Varchar, surname);
                     command.Parameters.AddWithValue("@firstname", NpgsqlDbType.Varchar, name);
-                    command.Parameters.AddWithValue("@patronymic", NpgsqlDbType.Varchar, patronymic);
+                    command.Parameters.AddWithValue("@patronymic", NpgsqlDbType.Varchar, patr);
                     command.Parameters.AddWithValue("@phone", NpgsqlDbType.Varchar, phone);
                     command.Parameters.AddWithValue("@socialstatus", NpgsqlDbType.Varchar, status);
                     command.Parameters.AddWithValue("@debt", NpgsqlDbType.Boolean, false);
