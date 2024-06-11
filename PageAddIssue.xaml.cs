@@ -80,6 +80,7 @@ namespace LibrISv2
         private void bAdd_Click(object sender, RoutedEventArgs e)
         {
             string warning = "Необходимо заполнить поля:\n";
+            string keyword = " ";
             int troubles = 0;
             int amountChecked = AmountFillingCheck(tbAmount.Text.Trim());
             int pageChecked = PageNumFillingCheck(tbPageNum.Text.Trim());
@@ -140,6 +141,7 @@ namespace LibrISv2
                 troubles++;
             }
             if (troubles > 0) { MessageBox.Show(warning + "Введите все необходимые данные и повторите попытку"); }
+            if (tbTag.Text.Trim() != "Ключевые слова") { keyword = tbTag.Text.Trim(); }
 
             if (troubles == 0)
             {
@@ -167,7 +169,7 @@ namespace LibrISv2
                         command.Parameters.AddWithValue("@amount", NpgsqlDbType.Integer, amountChecked);
                         command.Parameters.AddWithValue("@annotation", NpgsqlDbType.Varchar, " ");
                         command.Parameters.AddWithValue("@image", NpgsqlDbType.Varchar, tbImage.Text.Trim() ?? "/pic/no_image.png");
-                        command.Parameters.AddWithValue("@keyword", NpgsqlDbType.Varchar, " ");
+                        command.Parameters.AddWithValue("@keyword", NpgsqlDbType.Varchar, keyword);
                         command.Parameters.AddWithValue("@authorsign", NpgsqlDbType.Varchar, tbSign.Text.Trim());
                         int result = command.ExecuteNonQuery();
                         if (result == 1)
@@ -252,6 +254,9 @@ namespace LibrISv2
             tbYear.Text = "Год издания";
             tbYear.Foreground = Brushes.LightSlateGray;
 
+            tbTag.Text = "Ключевые слова";
+            tbTag.Foreground = Brushes.LightSlateGray;
+
             cbBBK.SelectedIndex = -1;
             tbBBKTip.Foreground = Brushes.LightSlateGray;
 
@@ -307,11 +312,15 @@ namespace LibrISv2
                 if (((IssueType)cbType.SelectedItem).Type == "Книжное")
                 {
                     lvAuthors.IsEnabled = true;
+                    tbFilter.IsEnabled = true;
+                    SelectedAuthors.Clear();
                 }
                 if (((IssueType)cbType.SelectedItem).Type != "Книжное")
                 {
                     lvAuthors.SelectedIndex = -1;
                     lvAuthors.IsEnabled = false;
+                    tbFilter.IsEnabled = false;
+                    SelectedAuthors.Clear();
                 }
             }
         }
@@ -467,6 +476,22 @@ namespace LibrISv2
             {
                 tbFilter.Text = "Найти автора";
                 tbFilter.Foreground = Brushes.LightSlateGray;
+            }
+        }
+        private void tbTag_GotFocus(object sender, RoutedEventArgs e)
+        {
+            if (tbTag.Text == "Ключевые слова")
+            {
+                tbTag.Text = string.Empty;
+                tbTag.Foreground = Design._dark;
+            }
+        }
+        private void tbTag_LostFocus(object sender, RoutedEventArgs e)
+        {
+            if (tbTag.Text == string.Empty)
+            {
+                tbTag.Text = "Ключевые слова";
+                tbTag.Foreground = Brushes.LightSlateGray;
             }
         }
 

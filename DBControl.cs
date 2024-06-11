@@ -31,21 +31,20 @@ namespace LibrISv2
             command.CommandText = sql;
             return command;
         }
+
         public static ObservableCollection<Author> Authors { get; set; } = new ObservableCollection<Author>();
-        //public static ObservableCollection<City> cities { get; set; } = new ObservableCollection<City>();
         public static ObservableCollection<Client> Clients { get; set; } = new ObservableCollection<Client>();
         public static ObservableCollection<DecimalClassification> DecClassifications { get; set; } = new ObservableCollection<DecimalClassification>();
         public static ObservableCollection<Department> Departments { get; set; } = new ObservableCollection<Department>();
-        //public static ObservableCollection<Employee> employees { get; set; } = new ObservableCollection<Employee>();
         public static ObservableCollection<Issue> Issues { get; set; } = new ObservableCollection<Issue>();
-        //public static ObservableCollection<Issue> IssuesAdapted { get; set; } = [];
         public static ObservableCollection<IssueType> IssueTypes { get; set; } = new ObservableCollection<IssueType>();
-        //public static ObservableCollection<Library> libraries { get; set; } = new ObservableCollection<Library>();
         public static ObservableCollection<LibraryClassification> LibClassifications { get; set; } = new ObservableCollection<LibraryClassification>();
         public static ObservableCollection<Operation> Operations { get; set; } = new ObservableCollection<Operation>();
         public static ObservableCollection<OperationStatus> OperationStatuses { get; set; } = new ObservableCollection<OperationStatus>();
         public static ObservableCollection<Publisher> Publishers { get; set; } = new ObservableCollection<Publisher>();
         public static ObservableCollection<Role> Roles { get; set; } = new ObservableCollection<Role>();
         public static ObservableCollection<SocialStatus> SocialStatuses { get; set; } = new ObservableCollection<SocialStatus>();
+        //public static ObservableCollection<City> cities { get; set; } = new ObservableCollection<City>();                 в текущей версии не используется
+        //public static ObservableCollection<Library> libraries { get; set; } = new ObservableCollection<Library>();         в текущей версии не используется
     }
 }

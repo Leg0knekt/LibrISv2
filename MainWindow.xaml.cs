@@ -36,7 +36,7 @@ namespace LibrISv2
             DataContext = this;
             try
             {
-                var sr = new StreamReader("../connect.txt");
+                var sr = new StreamReader("../connect.txt");        // Поскольку используемое облако не предполагает свободного размещения файлов, временно помещаем в папке
                 string str = sr.ReadToEnd();
                 string[] config = str.Split('|');
                 server = config[0];
@@ -50,15 +50,16 @@ namespace LibrISv2
             }
             catch
             {
-                // Если файл настроек не найден, попытается подключиться с дефолтными настройками
+                // Данный блок кода необходим для упрощения тестирования. К релизу вложенный try-catch удаляется, создание файла переносится во внешний catch
+                // Если файл настроек не найден, попытается подключиться с дефолтными настройками.
                 try
                 {
-                    DBControl.Connect("localhost", "5432", "postgres", "LibraryIS", "1234");
+                    DBControl.Connect("192.168.1.214", "5432", "postgres", "libraryis", "1234");
                     AppFrame.Navigate(PageControl.PageAuth);
                 }
                 catch
                 {
-                    // Если и это не удалось - администратору необходимо создать файл настроек
+                    // Если и это не удалось - администратору необходимо создать файл настроек.
                     MessageBox.Show("Не удалось установить соединение, поскольку отсутствует файл настроек.\n " +
                                     "Необходимо ввести данные для подключения вручную.\n " +
                                     "Если эти данные вам не известны, обратитесь к администратору");
@@ -266,6 +267,8 @@ namespace LibrISv2
                 cmdLvL2.ExecuteNonQuery();
                 cmdLvL2 = DBControl.GetCommand("INSERT INTO \"LibraryClassification\" (index, industry) VALUES ('84(5)', 'Литература Азии')");
                 cmdLvL2.ExecuteNonQuery();
+                cmdLvL2 = DBControl.GetCommand("INSERT INTO \"LibraryClassification\" (index, industry) VALUES ('16', 'Информатика и информационные технологии')");
+                cmdLvL2.ExecuteNonQuery();
             }
             else reader.Close();
         }
@@ -289,6 +292,8 @@ namespace LibrISv2
                 cmdLvL2 = DBControl.GetCommand("INSERT INTO \"DecimalClassification\" (index, industry) VALUES ('332', 'Территориальная экономика. Аграрный вопрос. Жилищное хозяйство')");
                 cmdLvL2.ExecuteNonQuery();
                 cmdLvL2 = DBControl.GetCommand("INSERT INTO \"DecimalClassification\" (index, industry) VALUES ('811', 'Языки естественные и искусственные')");
+                cmdLvL2.ExecuteNonQuery();
+                cmdLvL2 = DBControl.GetCommand("INSERT INTO \"DecimalClassification\" (index, industry) VALUES ('004', 'Информационные технологии. Теория вычислительных машин и систем')");
                 cmdLvL2.ExecuteNonQuery();
             }
             else reader.Close();
@@ -328,20 +333,25 @@ namespace LibrISv2
             if (!reader.HasRows)
             {
                 reader.Close();
-                NpgsqlCommand cmdLvL2 = DBControl.GetCommand("INSERT INTO \"Author\" (code, surname, firstname, patronymic, photo) " +
-                                                             "VALUES (1, 'Лермонтов', 'Михаил', 'Юрьевич', '/pic/no_image.png')");
+                NpgsqlCommand cmdLvL2 = DBControl.GetCommand("INSERT INTO \"Author\" (code, surname, firstname, patronymic, photo) VALUES (1, 'Лермонтов', 'Михаил', 'Юрьевич', '/pic/no_image.png')");
                 cmdLvL2.ExecuteNonQuery();
-                cmdLvL2 = DBControl.GetCommand("INSERT INTO \"Author\" (code, surname, firstname, patronymic, photo) " +
-                                                             "VALUES (2, 'Акутами', 'Гэгэ', '', '/pic/no_image.png')");
+                cmdLvL2 = DBControl.GetCommand("INSERT INTO \"Author\" (code, surname, firstname, patronymic, photo) VALUES (2, 'Акутами', 'Гэгэ', '', '/pic/no_image.png')");
                 cmdLvL2.ExecuteNonQuery();
-                cmdLvL2 = DBControl.GetCommand("INSERT INTO \"Author\" (code, surname, firstname, patronymic, photo) " +
-                                                             "VALUES (3, 'Бархударов', 'Степан', 'Григорьевич', '/pic/no_image.png')");
+                cmdLvL2 = DBControl.GetCommand("INSERT INTO \"Author\" (code, surname, firstname, patronymic, photo) VALUES (3, 'Бархударов', 'Степан', 'Григорьевич', '/pic/no_image.png')");
                 cmdLvL2.ExecuteNonQuery();
-                cmdLvL2 = DBControl.GetCommand("INSERT INTO \"Author\" (code, surname, firstname, patronymic, photo) " +
-                                                             "VALUES (4, 'Кузнецова', 'Надежда', 'Анатольевна', '/pic/no_image.png')");
+                cmdLvL2 = DBControl.GetCommand("INSERT INTO \"Author\" (code, surname, firstname, patronymic, photo) VALUES (4, 'Кузнецова', 'Надежда', 'Анатольевна', '/pic/no_image.png')");
                 cmdLvL2.ExecuteNonQuery();
-                cmdLvL2 = DBControl.GetCommand("INSERT INTO \"Author\" (code, surname, firstname, patronymic, photo) " +
-                                                             "VALUES (5, 'Сапковский', 'Анджей', '', '/pic/no_image.png')");
+                cmdLvL2 = DBControl.GetCommand("INSERT INTO \"Author\" (code, surname, firstname, patronymic, photo) VALUES (5, 'Сапковский', 'Анджей', '', '/pic/no_image.png')");
+                cmdLvL2.ExecuteNonQuery();
+                cmdLvL2 = DBControl.GetCommand("INSERT INTO \"Author\" (code, surname, firstname, patronymic, photo) VALUES (6, 'Тьюринг', 'Алан', '', '/pic/no_image.png')");
+                cmdLvL2.ExecuteNonQuery();
+                cmdLvL2 = DBControl.GetCommand("INSERT INTO \"Author\" (code, surname, firstname, patronymic, photo) VALUES (7, 'Курцвейл', 'Рэймонд', '', '/pic/no_image.png')");
+                cmdLvL2.ExecuteNonQuery();
+                cmdLvL2 = DBControl.GetCommand("INSERT INTO \"Author\" (code, surname, firstname, patronymic, photo) VALUES (8, 'Олифер', 'Виктор', '', '/pic/no_image.png')");
+                cmdLvL2.ExecuteNonQuery();
+                cmdLvL2 = DBControl.GetCommand("INSERT INTO \"Author\" (code, surname, firstname, patronymic, photo) VALUES (9, 'Эмис', 'Мартин', '', '/pic/no_image.png')");
+                cmdLvL2.ExecuteNonQuery();
+                cmdLvL2 = DBControl.GetCommand("INSERT INTO \"Author\" (code, surname, firstname, patronymic, photo) VALUES (10, 'Нейман', 'Джон', '', '/pic/no_image.png')");
                 cmdLvL2.ExecuteNonQuery();
             }
             else reader.Close();
@@ -353,40 +363,52 @@ namespace LibrISv2
             if (!reader.HasRows)
             {
                 reader.Close();
-                NpgsqlCommand cmdLvL2 = DBControl.GetCommand("INSERT INTO \"Issue\" (identifier, name, type, \"BBK\", \"UDK\", year, publisher, pagecount, storage, " +
-                                                                                    "amount, annotation, image, keyword, authorsign) " +
-                                                             "VALUES ('978-5-87-107963-8', 'Демон', 'Книжное', '84(2)', '82-3', 2015, '1117746849648', 352, 2, " +
-                                                                      "6, '', '/pic/no_image.png', '', 'Л32')");
+                NpgsqlCommand cmdLvL2 = DBControl.GetCommand("INSERT INTO \"Issue\" (identifier, name, type, \"BBK\", \"UDK\", year, publisher, pagecount, storage, amount, annotation, image, keyword, authorsign) " +
+                                                             "VALUES ('978-5-87-107963-8', 'Демон', 'Книжное', '84(2)', '82-3', 2015, '1117746849648', 352, 2, 6, '', '/pic/no_image.png', '', 'Л32')");
                 cmdLvL2.ExecuteNonQuery();
 
-                cmdLvL2 = DBControl.GetCommand("INSERT INTO \"Issue\" (identifier, name, type, \"BBK\", \"UDK\", year, publisher, pagecount, storage, " +
-                                                                                    "amount, annotation, image, keyword, authorsign) " +
-                                                             "VALUES ('978-5-389-22224-3', 'Таланты умирают молодыми', 'Книжное', '84(5)', '82-9', 2023, '5077746791634', 127, " +
-                                                             "2, 1, '', '/pic/no_image.png', '', 'А77')");
+                cmdLvL2 = DBControl.GetCommand("INSERT INTO \"Issue\" (identifier, name, type, \"BBK\", \"UDK\", year, publisher, pagecount, storage, amount, annotation, image, keyword, authorsign) " +
+                                                             "VALUES ('978-5-389-22224-3', 'Таланты умирают молодыми', 'Книжное', '84(5)', '82-9', 2023, '5077746791634', 127, 2, 1, '', '/pic/no_image.png', '', 'А77')");
                 cmdLvL2.ExecuteNonQuery();
 
-                cmdLvL2 = DBControl.GetCommand("INSERT INTO \"Issue\" (identifier, name, type, \"BBK\", \"UDK\", year, publisher, pagecount, storage, " +
-                                                                                    "amount, annotation, image, keyword, authorsign) " +
-                                                             "VALUES ('978-5-389-24137-4', 'Перелётный гусь', 'Книжное', '84(5)', '82-9', 2023, '5077746791634', 119, " +
-                                                             "2, 1, '', '/pic/no_image.png', '', 'А77')");
+                cmdLvL2 = DBControl.GetCommand("INSERT INTO \"Issue\" (identifier, name, type, \"BBK\", \"UDK\", year, publisher, pagecount, storage, amount, annotation, image, keyword, authorsign) " +
+                                                             "VALUES ('978-5-389-24137-4', 'Перелётный гусь', 'Книжное', '84(5)', '82-9', 2023, '5077746791634', 119, 2, 1, '', '/pic/no_image.png', '', 'А77')");
                 cmdLvL2.ExecuteNonQuery();
 
-                cmdLvL2 = DBControl.GetCommand("INSERT INTO \"Issue\" (identifier, name, type, \"BBK\", \"UDK\", year, publisher, pagecount, storage, " +
-                                                                                    "amount, annotation, image, keyword, authorsign) " +
-                                                             "VALUES ('978-5-389-22224-2', 'В преддверии праздника', 'Книжное', '84(5)', '82-9', 2023, '5077746791634', 122, " +
-                                                             "2, 2, '', '/pic/no_image.png', '', 'А77')");
+                cmdLvL2 = DBControl.GetCommand("INSERT INTO \"Issue\" (identifier, name, type, \"BBK\", \"UDK\", year, publisher, pagecount, storage, amount, annotation, image, keyword, authorsign) " +
+                                                             "VALUES ('978-5-389-22224-2', 'В преддверии праздника', 'Книжное', '84(5)', '82-9', 2023, '5077746791634', 122, 2, 2, '', '/pic/no_image.png', '', 'А77')");
                 cmdLvL2.ExecuteNonQuery();
 
-                cmdLvL2 = DBControl.GetCommand("INSERT INTO \"Issue\" (identifier, name, type, \"BBK\", \"UDK\", year, publisher, pagecount, storage, " +
-                                                                                    "amount, annotation, image, keyword, authorsign) " +
-                                                             "VALUES ('978-5-488-01677-4', 'Орфографический словарь русского языка: 106000 слов', 'Книжное', '81.411.2-4', '811', 2004, '1147746296532', 478, " +
-                                                             "3, 12, '', '/pic/no_image.png', '', 'Б49')");
+                cmdLvL2 = DBControl.GetCommand("INSERT INTO \"Issue\" (identifier, name, type, \"BBK\", \"UDK\", year, publisher, pagecount, storage, amount, annotation, image, keyword, authorsign) " +
+                                                             "VALUES ('978-5-488-01677-4', 'Орфографический словарь русского языка: 106000 слов', 'Книжное', '81.411.2-4', '811', 2004, '1147746296532', 478, 3, 12, '', '/pic/no_image.png', 'русский язык', 'Б49')");
                 cmdLvL2.ExecuteNonQuery();
 
-                cmdLvL2 = DBControl.GetCommand("INSERT INTO \"Issue\" (identifier, name, type, \"BBK\", \"UDK\", year, publisher, pagecount, storage, " +
-                                                                                    "amount, annotation, image, keyword, authorsign) " +
-                                                             "VALUES ('978-5-117-06232-4', 'Развитие системы сельскохозяйственных потребительских кооперативов', 'Книжное', '65.32', '332', 2004, '1022201769721', 99, " +
-                                                             "4, 3, '', '/pic/no_image.png', '', 'К37')");
+                cmdLvL2 = DBControl.GetCommand("INSERT INTO \"Issue\" (identifier, name, type, \"BBK\", \"UDK\", year, publisher, pagecount, storage, amount, annotation, image, keyword, authorsign) " +
+                                                             "VALUES ('978-5-117-06232-4', 'Развитие системы сельскохозяйственных потребительских кооперативов', 'Книжное', '65.32', '332', 2004, '1022201769721', 99, 4, 3, '', '/pic/no_image.png', 'сельское хозяйство', 'К37')");
+                cmdLvL2.ExecuteNonQuery();
+
+                cmdLvL2 = DBControl.GetCommand("INSERT INTO \"Issue\" (identifier, name, type, \"BBK\", \"UDK\", year, publisher, pagecount, storage, amount, annotation, image, keyword, authorsign) " +
+                                                             "VALUES ('978-5-17-105970-5', 'Вычислительные машины и разум', 'Книжное', '16', '004', 2018, '1117746849648', 128, 3, 5, '', '/pic/no_image.png', 'информатика', 'Т82')");
+                cmdLvL2.ExecuteNonQuery();
+
+                cmdLvL2 = DBControl.GetCommand("INSERT INTO \"Issue\" (identifier, name, type, \"BBK\", \"UDK\", year, publisher, pagecount, storage, amount, annotation, image, keyword, authorsign) " +
+                                                             "VALUES ('978-5-9710-2758-4', 'Может ли машина мыслить?', 'Книжное', '16', '004', 2016, '1147746296532', 128, 3, 7, '', '/pic/no_image.png', 'информатика', 'Т82')");
+                cmdLvL2.ExecuteNonQuery();
+
+                cmdLvL2 = DBControl.GetCommand("INSERT INTO \"Issue\" (identifier, name, type, \"BBK\", \"UDK\", year, publisher, pagecount, storage, amount, annotation, image, keyword, authorsign) " +
+                                                             "VALUES ('978-5-04-111270-7', 'Эволюция разума', 'Книжное', '16', '004', 2020, '1022201769721', 448, 3, 4, '', '/pic/no_image.png', 'информатика', 'К46')");
+                cmdLvL2.ExecuteNonQuery();
+
+                cmdLvL2 = DBControl.GetCommand("INSERT INTO \"Issue\" (identifier, name, type, \"BBK\", \"UDK\", year, publisher, pagecount, storage, amount, annotation, image, keyword, authorsign) " +
+                                                             "VALUES ('978-5-4461-1426-9', 'Компьютерные сети', 'Книжное', '16', '004', 2020, '1022201769721', 1008, 3, 9, '', '/pic/no_image.png', 'информатика', 'О127')");
+                cmdLvL2.ExecuteNonQuery();
+
+                cmdLvL2 = DBControl.GetCommand("INSERT INTO \"Issue\" (identifier, name, type, \"BBK\", \"UDK\", year, publisher, pagecount, storage, amount, annotation, image, keyword, authorsign) " +
+                                                             "VALUES ('978-5-699-27868-8', 'Информация', 'Книжное', '16', '004', 2008, '1027739148656', 576, 3, 3, '', '/pic/no_image.png', 'информатика', 'Э22')");
+                cmdLvL2.ExecuteNonQuery();
+
+                cmdLvL2 = DBControl.GetCommand("INSERT INTO \"Issue\" (identifier, name, type, \"BBK\", \"UDK\", year, publisher, pagecount, storage, amount, annotation, image, keyword, authorsign) " +
+                                                             "VALUES ('978-5-17-148015-8', 'Вычислительная машина и мозг', 'Книжное', '16', '004', 2022, '1027739148656', 192, 3, 3, '', '/pic/no_image.png', 'информатика', 'Н91')");
                 cmdLvL2.ExecuteNonQuery();
             }
             else reader.Close();
@@ -409,6 +431,18 @@ namespace LibrISv2
                 cmdLvL2 = DBControl.GetCommand("INSERT INTO \"Authorship\" (issue, author) VALUES ('978-5-488-01677-4', 3)");
                 cmdLvL2.ExecuteNonQuery();
                 cmdLvL2 = DBControl.GetCommand("INSERT INTO \"Authorship\" (issue, author) VALUES ('978-5-117-06232-4', 4)");
+                cmdLvL2.ExecuteNonQuery();
+                cmdLvL2 = DBControl.GetCommand("INSERT INTO \"Authorship\" (issue, author) VALUES ('978-5-17-105970-5', 6)");
+                cmdLvL2.ExecuteNonQuery();
+                cmdLvL2 = DBControl.GetCommand("INSERT INTO \"Authorship\" (issue, author) VALUES ('978-5-9710-2758-4', 6)");
+                cmdLvL2.ExecuteNonQuery();
+                cmdLvL2 = DBControl.GetCommand("INSERT INTO \"Authorship\" (issue, author) VALUES ('978-5-04-111270-7', 7)");
+                cmdLvL2.ExecuteNonQuery();
+                cmdLvL2 = DBControl.GetCommand("INSERT INTO \"Authorship\" (issue, author) VALUES ('978-5-4461-1426-9', 8)");
+                cmdLvL2.ExecuteNonQuery();
+                cmdLvL2 = DBControl.GetCommand("INSERT INTO \"Authorship\" (issue, author) VALUES ('978-5-699-27868-8', 9)");
+                cmdLvL2.ExecuteNonQuery();
+                cmdLvL2 = DBControl.GetCommand("INSERT INTO \"Authorship\" (issue, author) VALUES ('978-5-17-148015-8', 10)");
                 cmdLvL2.ExecuteNonQuery();
             }
             else reader.Close();

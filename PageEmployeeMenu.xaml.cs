@@ -21,6 +21,10 @@ namespace LibrISv2
         public PageEmployeeMenu()
         {
             InitializeComponent();
+            bAddIssue.Foreground = Design._azure;
+            bSortIssue.Foreground = bIssuance.Foreground = bReserved.Foreground = bNewClient.Foreground = bDebtors.Foreground = Design._dark;
+            bAddIssue.Background = Design._myrtle;
+            bSortIssue.Background = bIssuance.Background = bReserved.Background = bNewClient.Background = bDebtors.Background = null;
         }
 
         private void bAddIssue_Click(object sender, RoutedEventArgs e)

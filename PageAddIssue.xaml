@@ -27,12 +27,14 @@
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
 
         <TextBox Grid.Column="2" Grid.Row="1" Name="tbID" GotFocus="tbID_GotFocus" LostFocus="tbID_LostFocus" Text="ISBN / ISSN" Foreground="LightSlateGray"/>
         <TextBox Grid.Column="2" Grid.Row="2" Name="tbName" GotFocus="tbName_GotFocus" LostFocus="tbName_LostFocus" Text="Наименование" Foreground="LightSlateGray"/>
         <TextBox Grid.Column="2" Grid.Row="7" Name="tbImage" GotFocus="tbImage_GotFocus" LostFocus="tbImage_LostFocus" Text="Ссылка на изображение" Foreground="LightSlateGray" VerticalAlignment="Top"/>
+        <TextBox Grid.Column="2" Grid.Row="8" Name="tbTag" GotFocus="tbTag_GotFocus"  LostFocus="tbTag_LostFocus"  Text="Ключевые слова" Foreground="LightSlateGray" VerticalAlignment="Top"/>
         <Grid Grid.Column="2" Grid.Row="3" HorizontalAlignment="Stretch">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
@@ -113,7 +115,7 @@
                 <ColumnDefinition Width="auto"/>
                 <ColumnDefinition Width="auto"/>
             </Grid.ColumnDefinitions>
-            <TextBox Grid.Column="0" Name="tbFilter" Text="Найти автора" Foreground="LightSlateGray" GotFocus="tbFilter_GotFocus" LostFocus="tbFilter_LostFocus" TextChanged="tbFilter_TextChanged"/>
+            <TextBox Grid.Column="0" Name="tbFilter" Text="Найти автора" Foreground="LightSlateGray" GotFocus="tbFilter_GotFocus" LostFocus="tbFilter_LostFocus" TextChanged="tbFilter_TextChanged" IsEnabled="False"/>
             <Button Grid.Column="1" Content="╳" Name="bCancelFilter" Padding="10 0" FontSize="30" Click="bCancelFilter_Click" ToolTip="Сбросить фильтр"/>
             <Button Grid.Column="2" Content="+" Name="bAddAuthor" Padding="10 0 10 4" FontSize="30" Click="bAddAuthor_Click" ToolTip="Добавить нового автора"/>
         </Grid>

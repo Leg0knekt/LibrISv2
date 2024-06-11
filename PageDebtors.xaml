@@ -31,14 +31,17 @@
                             <RowDefinition/>
                             <RowDefinition/>
                         </Grid.RowDefinitions>
-                        <TextBlock Text="{Binding ExtraBook}" Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Left" Padding="5"/>
-                        <TextBlock Text="{Binding ExtraStatus}" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Right" Padding="5"/>
+                        <StackPanel Orientation="Horizontal" Grid.Row="0">
+                            <TextBlock Text="{Binding ExtraNumber}" VerticalAlignment="Center" HorizontalAlignment="Right" Padding="5"/>
+                            <TextBlock Text="{Binding ExtraBook}" VerticalAlignment="Center" HorizontalAlignment="Left" Padding="5"/>
+                        </StackPanel>
+                        <TextBlock Text="{Binding ExtraStatus}" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Left" Padding="5"/>
                     </Grid>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
-        <Button Grid.Row="0" Grid.Column="1" Content="ВСЕ"/>
-        <Button Grid.Row="0" Grid.Column="3" Content="ПРОСРОЧЕННЫЕ"/>
+        <Button Grid.Row="0" Grid.Column="1" Content="ВСЕ" Name="bAll" Click="bAll_Click"/>
+        <Button Grid.Row="0" Grid.Column="3" Content="ПРОСРОЧЕННЫЕ" Name="bWithPenalty" Click="bWithPenalty_Click"/>
         <Grid Grid.Row="1" Grid.Column="3" Name="debtInfo">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="auto"/>
@@ -51,13 +54,15 @@
                 <RowDefinition/>
                 <RowDefinition/>
                 <RowDefinition/>
+                <RowDefinition/>
             </Grid.RowDefinitions>
-            <Label Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right" Content="БИЛЕТ"/>
-            <Label Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right" Content="ФИО"/>
-            <Label Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right" Content="ТЕЛЕФОН"/>
-            <Label Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right" Content="ИЗДАНИЕ"/>
-            <Label Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right" Content="ВЫДАНО"/>
-            <Label Grid.Row="5" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right" Content="ВОЗВРАТ"/>
+            <Label Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Left" Content="БИЛЕТ"/>
+            <Label Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Left" Content="ФИО"/>
+            <Label Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Left" Content="ТЕЛЕФОН"/>
+            <Label Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Left" Content="ИЗДАНИЕ"/>
+            <Label Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Left" Content="ВЫДАНО"/>
+            <Label Grid.Row="5" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Left" Content="ВОЗВРАТ"/>
+            <Label Grid.Row="6" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Left" Content="ШТРАФ"/>
 
             <TextBlock Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Name="tb1"/>
             <TextBlock Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Name="tb2"/>
@@ -65,6 +70,7 @@
             <TextBlock Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Name="tb4"/>
             <TextBlock Grid.Row="4" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Name="tb5"/>
             <TextBlock Grid.Row="5" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Name="tb6"/>
+            <TextBlock Grid.Row="6" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Name="tb7"/>
         </Grid>
     </Grid>
 </Page>

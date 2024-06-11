@@ -22,11 +22,15 @@ namespace LibrISv2
     {
         private static DateTime todayDate;
         private static DateTime returningDate;
+        private static string now;
+        private static string ret;
         public WindowOperationSelector()
         {
             InitializeComponent();
-            todayDate = DateTime.Today;
+            todayDate = DateTime.Today.Date;
             returningDate = todayDate.AddDays(14);
+            now = todayDate.ToShortDateString();
+            ret = returningDate.ToShortDateString();
         }
 
         // Кнопки
@@ -35,36 +39,41 @@ namespace LibrISv2
             if (PageControl.PageIssuance == null) return;
             Client client = (Client)PageControl.PageIssuance.lvClients.SelectedItem;
             Issue issue = (Issue)PageControl.PageIssuance.lvIssues.SelectedItem;
+            
             if (client != null && issue != null)
             {
-                int amount = OperationCheck(issue, client);
-                if (amount < 0)
+                if (tbNum.Text.Trim().Length > 0)
                 {
-                    MessageBox.Show("Обнаружена серьёзная ошибка. Пожалуйста, обратитесь к разработчику или системному администритору");
-                    return;
-                }
-                if (amount >= 0)
-                {
-                    if (UpdateOperation(issue, client))
+                    int amount = OperationCheck(issue, client);
+                    if (amount < 0)
                     {
-                        if (IssueAmountUpdate(issue, amount + 1))
+                        MessageBox.Show("Обнаружена серьёзная ошибка. Пожалуйста, обратитесь к разработчику или системному администритору");
+                        return;
+                    }
+                    if (amount >= 0)
+                    {
+                        if (UpdateOperation(issue, client))
                         {
-                            MessageBox.Show(todayDate + " читателем " + client.Surname + " " + client.FirstName + " " + client.Patronymic +
-                                           " возвращено издание " + issue.Name);
-                            Close();
+                            if (IssueAmountUpdate(issue, amount + 1))
+                            {
+                                MessageBox.Show(now + " читателем " + client.Surname + " " + client.FirstName + " " + client.Patronymic +
+                                               " возвращено издание " + issue.Name);
+                                Close();
+                            }
+                            else
+                            {
+                                MessageBox.Show("Не удалось завершить операцию");
+                                return;
+                            }
                         }
                         else
                         {
-                            MessageBox.Show("Не удалось завершить операцию");
+                            MessageBox.Show("Не удалось обновить запись");
                             return;
                         }
                     }
-                    else
-                    {
-                        MessageBox.Show("Не удалось обновить запись");
-                        return;
-                    }
                 }
+                else { MessageBox.Show("Инвентарный номер должен быть указан"); }
             }
         }
         private void bIssuance_Click(object sender, RoutedEventArgs e)
@@ -74,38 +83,42 @@ namespace LibrISv2
             Issue issue = (Issue)PageControl.PageIssuance.lvIssues.SelectedItem;
             if (client != null && issue != null)
             {
-                int amount = AvailabilityCheck(issue);
-                if (amount == 0)
+                if (tbNum.Text.Trim().Length > 0)
                 {
-                    MessageBox.Show("В настоящий момент данного издания нет в наличии");
-                    return;
-                }
-                if (amount < 0)
-                {
-                    MessageBox.Show("Произошла непредвиденная ошибка. Обратитесь к разработчику или системному администратору");
-                }
-                if (amount > 0)
-                {
-                    if (IssueAmountUpdate(issue, amount - 1))
+                    int amount = AvailabilityCheck(issue);
+                    if (amount == 0)
                     {
-                        if (CreateOperation(issue, client))
+                        MessageBox.Show("В настоящий момент данного издания нет в наличии");
+                        return;
+                    }
+                    if (amount < 0)
+                    {
+                        MessageBox.Show("Произошла непредвиденная ошибка. Обратитесь к разработчику или системному администратору");
+                    }
+                    if (amount > 0)
+                    {
+                        if (IssueAmountUpdate(issue, amount - 1))
                         {
-                            MessageBox.Show(todayDate + " произведена операция выдачи издания " + issue.Name + " читателю " + client.Surname + " "
-                                            + client.FirstName + " " + client.Patronymic + "\nСрок возврата составляет 14 дней и истекает " + returningDate);
-                            Close();
+                            if (CreateOperation(issue, client))
+                            {
+                                MessageBox.Show(now + " произведена операция выдачи издания " + issue.Name + " читателю " + client.Surname + " "
+                                                + client.FirstName + " " + client.Patronymic + "\nСрок возврата составляет 14 дней и истекает " + ret);
+                                Close();
+                            }
+                            else
+                            {
+                                MessageBox.Show("Не удалось завершить операцию");
+                                return;
+                            }
                         }
                         else
                         {
-                            MessageBox.Show("Не удалось завершить операцию");
+                            MessageBox.Show("Не удалось обновить запись");
                             return;
                         }
                     }
-                    else
-                    {
-                        MessageBox.Show("Не удалось обновить запись");
-                        return;
-                    }
                 }
+                else { MessageBox.Show("Инвентарный номер должен быть указан"); }
             }
         }
         private void bCancel_Click(object sender, RoutedEventArgs e)
@@ -155,8 +168,8 @@ namespace LibrISv2
         }
         private bool CreateOperation(Issue issue, Client client)
         {
-            NpgsqlCommand command = DBControl.GetCommand("INSERT INTO \"Operation\" (client, issue, status, issuance, returningdate) " +
-                                                         "VALUES (@client, @issue, @status, @issuance, @returning)");
+            NpgsqlCommand command = DBControl.GetCommand("INSERT INTO \"Operation\" (client, issue, status, issuance, returningdate, num) " +
+                                                         "VALUES (@client, @issue, @status, @issuance, @returning, @num)");
             try
             {
                 command.Parameters.AddWithValue("@client", NpgsqlDbType.Varchar, client.LibCard);
@@ -164,6 +177,7 @@ namespace LibrISv2
                 command.Parameters.AddWithValue("@status", NpgsqlDbType.Varchar, "Выдано");
                 command.Parameters.AddWithValue("@issuance", NpgsqlDbType.Date, todayDate);
                 command.Parameters.AddWithValue("@returning", NpgsqlDbType.Date, returningDate);
+                command.Parameters.AddWithValue("@num", NpgsqlDbType.Varchar, tbNum.Text.Trim());
                 int result = command.ExecuteNonQuery();
                 if (result == 1)
                 {
@@ -178,18 +192,20 @@ namespace LibrISv2
         }
         private int OperationCheck(Issue issue, Client client)
         {
-            NpgsqlCommand command = DBControl.GetCommand("SELECT \"Operation\".\"client\", \"Operation\".\"issue\", \"Issue\".\"amount\", \"Issue\".\"identifier\" " +
+            NpgsqlCommand command = DBControl.GetCommand("SELECT \"Operation\".\"client\", \"Operation\".\"issue\", \"Issue\".\"amount\", \"Issue\".\"identifier\", \"Operation\".\"num\" " +
                                                          "FROM \"Operation\", \"Issue\" " +
                                                          "WHERE (\"Operation\".\"client\" = @client " +
                                                          "AND \"Operation\".\"issue\" = \"Issue\".\"identifier\" " +
                                                          "AND \"Operation\".\"issue\" = @issue " +
                                                          "AND \"Issue\".\"identifier\" = @issue " +
                                                          "AND \"Operation\".\"status\" != @status " +
-                                                         "AND \"Issue\".\"storage\" = @thisDepartment)");
+                                                         "AND \"Issue\".\"storage\" = @thisDepartment " +
+                                                         "AND \"Operation\".\"num\" = @num)");
             command.Parameters.AddWithValue("@issue", NpgsqlDbType.Varchar, issue.Identifier);
             command.Parameters.AddWithValue("@client", NpgsqlDbType.Varchar, client.LibCard);
             command.Parameters.AddWithValue("@status", NpgsqlDbType.Varchar, "Возвращено");
             command.Parameters.AddWithValue("@thisDepartment", NpgsqlDbType.Integer, MainWindow.currentUserWorkplace);
+            command.Parameters.AddWithValue("@num", NpgsqlDbType.Varchar, tbNum.Text.Trim());
             NpgsqlDataReader reader = command.ExecuteReader();
             if (!reader.HasRows)
             {
@@ -206,18 +222,22 @@ namespace LibrISv2
         }
         private bool UpdateOperation(Issue issue, Client client)
         {
-            NpgsqlCommand command = DBControl.GetCommand("UPDATE \"Operation\" SET status = @status WHERE client = @client AND issue = @issue");
+            NpgsqlCommand command = DBControl.GetCommand("UPDATE \"Operation\" SET status = @status WHERE client = @client AND issue = @issue AND num = @num");
             try
             {
                 command.Parameters.AddWithValue("@client", NpgsqlDbType.Varchar, client.LibCard);
                 command.Parameters.AddWithValue("@issue", NpgsqlDbType.Varchar, issue.Identifier);
                 command.Parameters.AddWithValue("@status", NpgsqlDbType.Varchar, "Возвращено");
+                command.Parameters.AddWithValue("@num", NpgsqlDbType.Varchar, tbNum.Text.Trim());
                 int result = command.ExecuteNonQuery();
                 if (result == 1)
                 {
                     return true;
                 }
-                else return false;
+                else
+                {
+                    return false;
+                }
             }
             catch
             {

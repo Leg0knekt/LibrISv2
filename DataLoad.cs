@@ -14,7 +14,6 @@ namespace LibrISv2
 {
     public partial class DataLoad
     {
-
         public static void LoadAuthors()
         {
             string lastname = " ";
@@ -202,7 +201,63 @@ namespace LibrISv2
             }
             reader.Close();
         }
+        public static void LoadOperations()
+        {
+            DBControl.Operations.Clear();
 
+            NpgsqlCommand command = DBControl.GetCommand("SELECT \"Operation\".id, \"Operation\".client, \"Operation\".issue, \"Operation\".status, \"Operation\".issuance, \"Operation\".returningdate, " +
+                                                         "\"OperationStatus\".status, " +
+                                                         "\"Client\".surname, \"Client\".firstname, \"Client\".patronymic, \"Client\".phone, " +
+                                                         "\"Issue\".identifier, \"Issue\".name, \"Issue\".storage, \"Operation\".num " +
+                                                         "FROM \"Operation\", \"OperationStatus\", \"Client\", \"Issue\"" +
+                                                         "WHERE (\"Client\".libcard = \"Operation\".client " +
+                                                         "AND \"Issue\".identifier = \"Operation\".issue " +
+                                                         "AND \"Operation\".status = \"OperationStatus\".status)");
+            NpgsqlDataReader reader = command.ExecuteReader();
+            if (reader.HasRows)
+            {
+                while (reader.Read())
+                {
+                    if (reader.GetInt32(13) == MainWindow.currentUserWorkplace && reader.GetString(3) != "Возвращено")
+                    {
+                        string client;
+                        string status;
+                        if ((DateTime.Today - reader.GetDateTime(5)).Days > 0) { status = "ПРОСРОЧЕНО!"; }
+                        else { status = reader.GetString(3); }
+                        client = reader.GetString(7).ToString() + " " + reader.GetString(8).ToString() + " " + reader.GetString(9).ToString();
+                        DBControl.Operations.Add(new Operation(reader.GetInt32(0),
+                                                               reader.GetString(1),
+                                                               reader.GetString(2),
+                                                               reader.GetString(3),
+                                                               reader.GetDateTime(4),
+                                                               reader.GetDateTime(5),
+                                                               client,
+                                                               reader.GetString(10),
+                                                               reader.GetString(12),
+                                                               status, 
+                                                               reader.GetString(14)));
+                    }
+                }
+            }
+            reader.Close();
+        }
+        
+        // В текущей версии не используется
+        //public static void LoadOperationStatuses()
+        //{
+        //    DBControl.OperationStatuses.Clear();
+
+        //    NpgsqlCommand command = DBControl.GetCommand("SELECT status FROM \"OperationStatus\"");
+        //    NpgsqlDataReader reader = command.ExecuteReader();
+        //    if (reader.HasRows)
+        //    {
+        //        while (reader.Read())
+        //        {
+        //            DBControl.OperationStatuses.Add(new OperationStatus(reader.GetString(0)));
+        //        }
+        //    }
+        //    reader.Close();
+        //}
 
         //public static void LoadCities()
         //{
@@ -243,63 +298,5 @@ namespace LibrISv2
         //    }
         //    reader.Close();
         //}
-
-        public static void LoadOperations()
-        {
-            DBControl.Operations.Clear();
-
-            NpgsqlCommand command = DBControl.GetCommand("SELECT \"Operation\".id, \"Operation\".client, \"Operation\".issue, \"Operation\".status, \"Operation\".issuance, \"Operation\".returningdate, " +
-                                                         "\"OperationStatus\".status, " +
-                                                         "\"Client\".surname, \"Client\".firstname, \"Client\".patronymic, \"Client\".phone, " +
-                                                         "\"Issue\".identifier, \"Issue\".name, \"Issue\".storage " +
-                                                         "FROM \"Operation\", \"OperationStatus\", \"Client\", \"Issue\"" +
-                                                         "WHERE (\"Client\".libcard = \"Operation\".client " +
-                                                         "AND \"Issue\".identifier = \"Operation\".issue " +
-                                                         "AND \"Operation\".status = \"OperationStatus\".status)");
-            NpgsqlDataReader reader = command.ExecuteReader();
-            if (reader.HasRows)
-            {
-                while (reader.Read())
-                {
-                    if (reader.GetInt32(13) == MainWindow.currentUserWorkplace && reader.GetString(3) != "Возвращено")
-                    {
-                        string client;
-                        string status;
-                        if ((DateTime.Today - reader.GetDateTime(5)).Days > 0) { status = "ПРОСРОЧЕНО!"; }
-                        else { status = reader.GetString(3); }
-                        client = reader.GetString(7).ToString() + " " + reader.GetString(8).ToString() + " " + reader.GetString(9).ToString();
-                        DBControl.Operations.Add(new Operation(reader.GetInt32(0),
-                                                               reader.GetString(1),
-                                                               reader.GetString(2),
-                                                               reader.GetString(3),
-                                                               reader.GetDateTime(4),
-                                                               reader.GetDateTime(5),
-                                                               client,
-                                                               reader.GetString(10),
-                                                               reader.GetString(12),
-                                                               status));
-                    }
-                }
-            }
-            reader.Close();
-        }
-
-        public static void LoadOperationStatuses()
-        {
-            DBControl.OperationStatuses.Clear();
-
-            NpgsqlCommand command = DBControl.GetCommand("SELECT status FROM \"OperationStatus\"");
-            NpgsqlDataReader reader = command.ExecuteReader();
-            if (reader.HasRows)
-            {
-                while (reader.Read())
-                {
-                    DBControl.OperationStatuses.Add(new OperationStatus(reader.GetString(0)));
-                }
-            }
-            reader.Close();
-        }
-
-
     }
 }

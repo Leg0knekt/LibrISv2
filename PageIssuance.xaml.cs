@@ -26,8 +26,6 @@ namespace LibrISv2
             lvIssues.SetBinding(ItemsControl.ItemsSourceProperty, new Binding() { Source = DBControl.Issues });
         }
 
-
-
         // Фильтр
         private void tbClientFilter_TextChanged(object sender, TextChangedEventArgs e)
         {

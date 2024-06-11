@@ -7,10 +7,18 @@
       mc:Ignorable="d" 
       d:DesignHeight="720" d:DesignWidth="1280"
       Title="PageReservationView"
-      Background="PaleVioletRed"
+      Background="{StaticResource _azure}"
       FontFamily="Microsoft YaHei UI Light" FontSize="16">
 
     <Grid>
-        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+        <Button Grid.Row="0" Content="ПЕЧАТЬ" HorizontalAlignment="Right" Name="bPrint" Click="bPrint_Click"/>
+        <TextBlock Text="Отчет книгообеспеченность за " FontSize="18" Margin="10" Padding="10" HorizontalAlignment="Left" Grid.Row="0"/>
+        <ScrollViewer Name="svDataBar" Grid.Row="1"/>
+        <ComboBox Grid.Row="2" Name="cbKey"/>
     </Grid>
 </Page>
