@@ -235,6 +235,7 @@ namespace LibrISv2
 
             tbFilter.Text = "Найти автора";
             tbFilter.Foreground = Brushes.LightSlateGray;
+            tbFilter.IsEnabled = false;
 
             tbID.Text = "ISBN / ISSN";
             tbID.Foreground = Brushes.LightSlateGray;

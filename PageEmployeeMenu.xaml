@@ -41,7 +41,7 @@
             BorderThickness="0" 
             Click="bIssuance_Click" Margin="10 0"/>
             <Button HorizontalAlignment="Center" VerticalAlignment="Center" 
-            Grid.Column="5" Name="bReserved" Content="В РАЗРАБОТКЕ" 
+            Grid.Column="5" Name="bReserved" Content="ОТЧЕТ" 
             BorderThickness="0" 
             Click="bReserved_Click" Margin="10 0"/>
             <Button HorizontalAlignment="Center" VerticalAlignment="Center" 

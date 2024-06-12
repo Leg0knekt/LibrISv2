@@ -34,7 +34,5 @@
             <TextBlock Grid.Row="1" Name="tbPassTip" Margin="10 10 0 10" Padding="10 0 0 0" VerticalAlignment="Center" HorizontalAlignment="Left" Text="Пароль" Foreground="LightSlateGray"/>
             <Button Grid.Row="2" Name="bLogIn" Content="ВОЙТИ"  Width="100px" Click="bLogIn_Click" Padding="10"/>
         </Grid>
-        <Button Grid.Column="2" Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Top" Content="Маяковка. Админ" Name="bTestAuth" Click="bTestAuth_Click"/>
-        <Button Grid.Column="2" Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Center" Content="Маяковка. Худ." Name="bTestAuth2" Click="bTestAuth2_Click"/>
     </Grid>
 </Page>

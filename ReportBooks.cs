@@ -8,16 +8,16 @@ namespace LibrISv2
 {
     public class ReportBooks
     {
-        public ReportBooks(string keyword, string[] names, int[] amounts, int coefficient)
+        public ReportBooks(string keyword, string id, string name, int amount)
         {
             Keyword = keyword;
-            Names = names;
-            Amounts = amounts;
-            Coefficient = coefficient;
+            Id = id;
+            Name = name;
+            Amount = amount;
         }
         public string Keyword { get; set; }
-        public string[] Names { get; set; }
-        public int[] Amounts { get; set; }
-        public int Coefficient { get; set; }
+        public string Id { get; set; }
+        public string Name { get; set; }
+        public int Amount { get; set; }
     }
 }

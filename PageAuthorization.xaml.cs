@@ -94,16 +94,5 @@ namespace LibrISv2
                 tbPassTip.Visibility = Visibility.Visible;
             }
         }
-        private void bTestAuth_Click(object sender, RoutedEventArgs e)
-        {
-            tbLogin.Text = "HorNI27";
-            tbPassword.Password = "#8hHYUB6";
-        }
-
-        private void bTestAuth2_Click(object sender, RoutedEventArgs e)
-        {
-            tbLogin.Text = "IvaLF23";
-            tbPassword.Password = "R3Nj$wj8";
-        }
     }
 }

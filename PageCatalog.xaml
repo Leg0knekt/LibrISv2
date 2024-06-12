@@ -7,7 +7,7 @@
       mc:Ignorable="d" 
       d:DesignHeight="720" d:DesignWidth="1280"
       Title="PageCatalog"
-      Background="LightPink" FontFamily="Microsoft YaHei UI Light" FontSize="16">
+      Background="{StaticResource _azure}" FontFamily="Microsoft YaHei UI Light" FontSize="16">
 
     <Grid>
         <Grid.ColumnDefinitions>

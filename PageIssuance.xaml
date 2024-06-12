@@ -73,7 +73,7 @@
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="auto"/>
-                                <ColumnDefinition Width="1*" MinWidth="380"/>
+                                <ColumnDefinition Width="1*" MinWidth="375"/>
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0" Text="{Binding LibCard}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0 0 10 0"/>
                             <Grid Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10 0">
