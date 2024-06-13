@@ -1,4 +1,5 @@
-﻿using Npgsql;
+﻿using Microsoft.Win32;
+using Npgsql;
 using NpgsqlTypes;
 using System;
 using System.Collections.Generic;
@@ -21,6 +22,7 @@ namespace LibrISv2
 {
     public partial class PageReservationView : Page
     {
+        public static SaveFileDialog saveFileDialog = new SaveFileDialog();
         public static ObservableCollection<ReportBooks> Books { get; set; } = new ObservableCollection<ReportBooks>();
         public static ObservableCollection<string> Keys { get; set; } = new ObservableCollection<string>();
         public static ComboBox cb;
@@ -40,7 +42,6 @@ namespace LibrISv2
             cb = cbKey;
             DataContext = this;
         }
-        
         private void BooksLoad()
         {
             if (cb != null)
@@ -83,11 +84,9 @@ namespace LibrISv2
                     }
                 }
                 reader2.Close();
-
             }
             else return;
         }
-
         public static void KeyLoad()
         {
             Keys.Clear();
@@ -131,7 +130,9 @@ namespace LibrISv2
         }
         private void bPrint_Click(object sender, RoutedEventArgs e)
         {
-            
+            saveFileDialog.Filter = "doc files (*.doc)|*.doc|All files (*.*)|*.*";
+            saveFileDialog.ShowDialog();
+            // 4 часа утра, я хочу спать :(
         }
     }
 }
