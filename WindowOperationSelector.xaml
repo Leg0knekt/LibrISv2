@@ -15,7 +15,16 @@
         </Grid.RowDefinitions>
         <TextBlock Grid.Row="0" Name="tb" Text="Осуществить выдачу или приём издания?" Margin="10" Padding="10" VerticalAlignment="Center"/>
         <TextBlock Grid.Row="1" Text="Инвентарный номер:" Margin="10" Padding="10" VerticalAlignment="Center" HorizontalAlignment="Left"/>
-        <TextBox Grid.Row="1" Name="tbNum" Margin="10" Padding="10" HorizontalAlignment="Right" VerticalAlignment="Center" Width="250"/>
+        <TextBox Grid.Row="1" Name="tbNum" Margin="10" Padding="10" HorizontalAlignment="Right" VerticalAlignment="Center" Width="250" Visibility="Hidden"/>
+        <ComboBox Grid.Row="1" Name="cbNum" Margin="10" Padding="10" HorizontalAlignment="Right" VerticalAlignment="Center" Width="250">
+            <ComboBox.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock>
+                        <Run Text="{Binding Num}"/>
+                    </TextBlock>
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+        </ComboBox>
         <Button Grid.Row="2" Name="bReturning" Content="ПРИНЯТЬ" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="30 0 0 0" Click="bReturning_Click"/>
         <Button Grid.Row="2" Name="bIssuance" Content="ВЫДАТЬ" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="30 0" Click="bIssuance_Click"/>
         <Button Grid.Row="2" Name="bCancel" Content="ОТМЕНИТЬ" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0 0 30 0" Click="bCancel_Click"/>

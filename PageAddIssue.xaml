@@ -80,8 +80,8 @@
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
                         <TextBlock>
-                    <Run Text="{Binding Index}"/>
-                    <Run Text="{Binding Industry}"/>
+                            <Run Text="{Binding Index}"/>
+                            <Run Text="{Binding Industry}"/>
                         </TextBlock>
                     </DataTemplate>
                 </ComboBox.ItemTemplate>

@@ -20,12 +20,17 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using static System.Net.Mime.MediaTypeNames;
 using System.Xml.Linq;
+using System.Windows.Media.Animation;
+using System.Windows.Annotations;
 
 namespace LibrISv2
 {
     public partial class PageAddIssue : Page
     {
+        public static string thisBook;
+        public static int thisBookAmount;
         public ObservableCollection<Author> SelectedAuthors = new ObservableCollection<Author>();
+        public static List<string> Numbers = new List<string>();
         public PageAddIssue()
         {
             InitializeComponent();
@@ -39,6 +44,8 @@ namespace LibrISv2
             cbType.SetBinding(ItemsControl.ItemsSourceProperty, new Binding() { Source = DBControl.IssueTypes });
             cbPublisher.SetBinding(ItemsControl.ItemsSourceProperty, new Binding() { Source = DBControl.Publishers });
             cbUDK.SetBinding(ItemsControl.ItemsSourceProperty, new Binding() { Source = DBControl.DecClassifications });
+            thisBook = string.Empty;
+            thisBookAmount = 0;
         }
 
         // Фильтрация
@@ -140,77 +147,35 @@ namespace LibrISv2
                 warning += "«Автор»\n";
                 troubles++;
             }
+            if (!TagFillingCheck(tbTag.Text.Trim()))
+            {
+                warning += "«Ключевые слова»\n";
+                troubles++;
+            }
             if (troubles > 0) { MessageBox.Show(warning + "Введите все необходимые данные и повторите попытку"); }
-            if (tbTag.Text.Trim() != "Ключевые слова") { keyword = tbTag.Text.Trim(); }
 
             if (troubles == 0)
             {
-                NpgsqlCommand precmd = DBControl.GetCommand("SELECT identifier FROM \"Issue\" WHERE identifier = @id");
-                precmd.Parameters.AddWithValue("@id", NpgsqlDbType.Varchar, tbID.Text.Trim());
-                NpgsqlDataReader reader = precmd.ExecuteReader();
-                if (!reader.HasRows)
-                {
-                    reader.Close();
-                    NpgsqlCommand command = DBControl.GetCommand("INSERT INTO \"Issue\" (identifier, name, type, \"BBK\", \"UDK\", year, publisher, " +
-                                                                               "pagecount, storage, amount, annotation, image, authorsign, keyword) " +
-                                                                "VALUES (@id, @name, @type, @bbk, @udk, @year, @publisher, " +
-                                                                        "@pages, @storage, @amount, @annotation, @image, @authorsign, @keyword)");
-                    try
-                    {
-                        command.Parameters.AddWithValue("@id", NpgsqlDbType.Varchar, tbID.Text.Trim());
-                        command.Parameters.AddWithValue("@name", NpgsqlDbType.Varchar, tbName.Text.Trim());
-                        command.Parameters.AddWithValue("@type", NpgsqlDbType.Varchar, ((IssueType)cbType.SelectedItem).Type);
-                        command.Parameters.AddWithValue("@bbk", NpgsqlDbType.Varchar, ((LibraryClassification)cbBBK.SelectedItem).Index);
-                        command.Parameters.AddWithValue("@udk", NpgsqlDbType.Varchar, ((DecimalClassification)cbUDK.SelectedItem).Index);
-                        command.Parameters.AddWithValue("@year", NpgsqlDbType.Integer, yearChecked);
-                        command.Parameters.AddWithValue("@publisher", NpgsqlDbType.Varchar, ((Publisher)cbPublisher.SelectedItem).OGRN);
-                        command.Parameters.AddWithValue("@pages", NpgsqlDbType.Integer, pageChecked);
-                        command.Parameters.AddWithValue("@storage", NpgsqlDbType.Integer, MainWindow.currentUserWorkplace);
-                        command.Parameters.AddWithValue("@amount", NpgsqlDbType.Integer, amountChecked);
-                        command.Parameters.AddWithValue("@annotation", NpgsqlDbType.Varchar, " ");
-                        command.Parameters.AddWithValue("@image", NpgsqlDbType.Varchar, tbImage.Text.Trim() ?? "/pic/no_image.png");
-                        command.Parameters.AddWithValue("@keyword", NpgsqlDbType.Varchar, keyword);
-                        command.Parameters.AddWithValue("@authorsign", NpgsqlDbType.Varchar, tbSign.Text.Trim());
-                        int result = command.ExecuteNonQuery();
-                        if (result == 1)
-                        {
-                            if (lvAuthors.SelectedIndex != -1)
-                            {
-                                foreach (Author author in lvAuthors.SelectedItems)
-                                {
-                                    command = DBControl.GetCommand("INSERT INTO \"Authorship\" (issue, author) VALUES (@isbn, @author)");
-                                    try
-                                    {
-                                        command.Parameters.AddWithValue("@isbn", NpgsqlDbType.Varchar, tbID.Text.Trim());
-                                        command.Parameters.AddWithValue("@author", NpgsqlDbType.Integer, author.Id);
-                                        result = command.ExecuteNonQuery();
-                                        if (result == 1)
-                                        {
-                                            MessageBox.Show("Книга успешно добавлена");
-                                        }
-                                    }
-                                    catch (Exception ax)
-                                    {
-                                        MessageBox.Show("Ошибка установления авторства\n" + ax);
-                                    }
-                                }
-                                bClear_Click(sender, e);
-                            }
-                            else
-                            {
-                                MessageBox.Show("Периодическое издание добавлено");
-                                bClear_Click(sender, e);
-                                return;
-                            }
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show("Не удалось добавить запись\n" + ex);
-                        return;
-                    }
-                }
-                else MessageBox.Show("Данное издание уже есть в списке");
+
+                CreateBook(tbID.Text.Trim(),
+                           tbName.Text.Trim(),
+                           ((IssueType)cbType.SelectedItem).Type,
+                           ((LibraryClassification)cbBBK.SelectedItem).Index,
+                           ((DecimalClassification)cbUDK.SelectedItem).Index,
+                           yearChecked,
+                           ((Publisher)cbPublisher.SelectedItem).OGRN,
+                           pageChecked,
+                           MainWindow.currentUserWorkplace,
+                           amountChecked,
+                           " ",
+                           tbImage.Text.Trim(),
+                           tbSign.Text.Trim(),
+                           tbTag.Text.ToLower().Trim());
+
+                thisBook = tbID.Text.Trim();
+                thisBookAmount = amountChecked;
+                WindowAddNum windowAddNum = new WindowAddNum();
+                windowAddNum.Show();
             }
         }
         private void bAddAuthor_Click(object sender, RoutedEventArgs e)
@@ -275,6 +240,136 @@ namespace LibrISv2
             lvAuthors.IsEnabled = false;
         }
 
+        //
+        public static void CreateNumbers()
+        {
+            bool success = false;
+            foreach (string num in Numbers)
+            {
+                
+                NpgsqlCommand cmd = DBControl.GetCommand("INSERT INTO \"Nums\" (book, num) VALUES (@book, @num)");
+                try
+                {
+                    cmd.Parameters.AddWithValue("@book", NpgsqlDbType.Varchar, thisBook);
+                    cmd.Parameters.AddWithValue("@num", NpgsqlDbType.Varchar, num);
+                    int result = cmd.ExecuteNonQuery();
+                    if (result == 1)
+                    {
+                        success = true;
+                    }
+                }
+                catch
+                {
+                    success = false;
+                }
+            }
+            
+            switch (success)
+            {
+                case true:
+                    MessageBox.Show("Добавлено книг: " + thisBookAmount);
+                    break;
+                case false:
+                    NpgsqlCommand del1 = DBControl.GetCommand("DELETE FROM \"Authorship\" WHERE issue = @id");
+                    try
+                    {
+                        del1.Parameters.AddWithValue("@id", NpgsqlDbType.Varchar, thisBook);
+                        int result = del1.ExecuteNonQuery();
+                        if (result == 1)
+                        {
+                            NpgsqlCommand del2 = DBControl.GetCommand("DELETE FROM \"Issue\" WHERE identifier = @id");
+                            try
+                            {
+                                del2.Parameters.AddWithValue("@id", NpgsqlDbType.Varchar, thisBook);
+                                int res = del2.ExecuteNonQuery();
+                                if (res == 1)
+                                {
+
+                                }
+                            }
+                            catch (Exception)
+                            {
+                                return;
+                            }
+                        }
+                    }
+                    catch (Exception)
+                    {
+                        return;
+                    }
+                    MessageBox.Show("Один или несколько указанных инвентарных номеров уже зарегистрированы. Введите другое значение");
+                    break;
+            } 
+            success = false;
+            thisBookAmount = 0;
+            thisBook = string.Empty;
+        }
+        private void CreateBook(string id, string name, string type, string bbk, string udk, int year, string publisher, int pages, int storage, int amount, string annotation, string image, string authorsign, string keyword)
+        {
+            NpgsqlCommand precmd = DBControl.GetCommand("SELECT identifier FROM \"Issue\" WHERE identifier = @id");
+            precmd.Parameters.AddWithValue("@id", NpgsqlDbType.Varchar, id);
+            NpgsqlDataReader reader = precmd.ExecuteReader();
+            if (!reader.HasRows)
+            {
+                reader.Close();
+                NpgsqlCommand command = DBControl.GetCommand("INSERT INTO \"Issue\" (identifier, name, type, \"BBK\", \"UDK\", year, publisher, pagecount, storage, amount, annotation, image, authorsign, keyword) " +
+                                                             "VALUES (@id, @name, @type, @bbk, @udk, @year, @publisher, @pages, @storage, @amount, @annotation, @image, @authorsign, @keyword)");
+                try
+                {
+                    command.Parameters.AddWithValue("@id", NpgsqlDbType.Varchar, id);
+                    command.Parameters.AddWithValue("@name", NpgsqlDbType.Varchar, name);
+                    command.Parameters.AddWithValue("@type", NpgsqlDbType.Varchar, type);
+                    command.Parameters.AddWithValue("@bbk", NpgsqlDbType.Varchar, bbk);
+                    command.Parameters.AddWithValue("@udk", NpgsqlDbType.Varchar, udk);
+                    command.Parameters.AddWithValue("@year", NpgsqlDbType.Integer, year);
+                    command.Parameters.AddWithValue("@publisher", NpgsqlDbType.Varchar, publisher);
+                    command.Parameters.AddWithValue("@pages", NpgsqlDbType.Integer, pages);
+                    command.Parameters.AddWithValue("@storage", NpgsqlDbType.Integer, storage);
+                    command.Parameters.AddWithValue("@amount", NpgsqlDbType.Integer, amount);
+                    command.Parameters.AddWithValue("@annotation", NpgsqlDbType.Varchar, annotation);
+                    command.Parameters.AddWithValue("@image", NpgsqlDbType.Varchar, image ?? "/pic/no_image.png");
+                    command.Parameters.AddWithValue("@authorsign", NpgsqlDbType.Varchar, authorsign);
+                    command.Parameters.AddWithValue("@keyword", NpgsqlDbType.Varchar, keyword);
+                    int result = command.ExecuteNonQuery();
+                    if (result == 1)
+                    {
+                        if (lvAuthors.SelectedIndex != -1)
+                        {
+                            foreach (Author author in lvAuthors.SelectedItems)
+                            {
+                                command = DBControl.GetCommand("INSERT INTO \"Authorship\" (issue, author) VALUES (@isbn, @author)");
+                                try
+                                {
+                                    command.Parameters.AddWithValue("@isbn", NpgsqlDbType.Varchar, id);
+                                    command.Parameters.AddWithValue("@author", NpgsqlDbType.Integer, author.Id);
+                                    result = command.ExecuteNonQuery();
+                                    if (result < 1)
+                                    {
+                                        
+                                    }
+                                }
+                                catch (Exception ax)
+                                {
+                                    MessageBox.Show("Ошибка установления авторства\n" + ax);
+                                }
+                            }
+                            //bClear_Click(sender, e);
+                        }
+                        else
+                        {
+                            MessageBox.Show("Периодическое издание добавлено");
+                            return;
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Не удалось добавить запись\n" + ex);
+                    return;
+                }
+            }
+            else MessageBox.Show("Данное издание уже есть в списке");
+        }
         // Изменение выбора ComboBox и ListView
         private void lvAuthors_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -621,6 +716,15 @@ namespace LibrISv2
             }
             try { return int.Parse(year); }
             catch { return 0; }
+        }
+        private bool TagFillingCheck(string tag)
+        {
+            if (tag == "Ключевые слова")
+            {
+                tbTag.Foreground = Brushes.Crimson;
+                return false;
+            }
+            else return true;
         }
     }
 }

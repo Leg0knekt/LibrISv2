@@ -125,6 +125,7 @@
     <Compile Include="Employee.cs" />
     <Compile Include="InitialsConverter.cs" />
     <Compile Include="Library.cs" />
+    <Compile Include="Nums.cs" />
     <Compile Include="Operation.cs" />
     <Compile Include="OperationStatus.cs" />
     <Compile Include="PageAddIssue.xaml.cs">
@@ -167,6 +168,9 @@
     <Compile Include="SocialStatus.cs" />
     <Compile Include="WindowAddAuthor.xaml.cs">
       <DependentUpon>WindowAddAuthor.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WindowAddNum.xaml.cs">
+      <DependentUpon>WindowAddNum.xaml</DependentUpon>
     </Compile>
     <Compile Include="WindowAddPublisher.xaml.cs">
       <DependentUpon>WindowAddPublisher.xaml</DependentUpon>
@@ -240,6 +244,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="WindowAddAuthor.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="WindowAddNum.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

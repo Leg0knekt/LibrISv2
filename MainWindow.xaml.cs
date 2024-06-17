@@ -82,6 +82,8 @@ namespace LibrISv2
             AddSocialStatus();
             AddClient();
             AddOperationStatus();
+            AddNumbers();
+            AddOperation();
         }
         public static void DisplayGreetings(string name, string patronymic)
         {
@@ -364,19 +366,19 @@ namespace LibrISv2
             {
                 reader.Close();
                 NpgsqlCommand cmdLvL2 = DBControl.GetCommand("INSERT INTO \"Issue\" (identifier, name, type, \"BBK\", \"UDK\", year, publisher, pagecount, storage, amount, annotation, image, keyword, authorsign) " +
-                                                             "VALUES ('978-5-87-107963-8', 'Демон', 'Книжное', '84(2)', '82-3', 2015, '1117746849648', 352, 2, 6, '', '/pic/no_image.png', '', 'Л32')");
+                                                             "VALUES ('978-5-87-107963-8', 'Демон', 'Книжное', '84(2)', '82-3', 2015, '1117746849648', 352, 2, 6, '', '/pic/no_image.png', 'художественное', 'Л32')");
                 cmdLvL2.ExecuteNonQuery();
 
                 cmdLvL2 = DBControl.GetCommand("INSERT INTO \"Issue\" (identifier, name, type, \"BBK\", \"UDK\", year, publisher, pagecount, storage, amount, annotation, image, keyword, authorsign) " +
-                                                             "VALUES ('978-5-389-22224-3', 'Таланты умирают молодыми', 'Книжное', '84(5)', '82-9', 2023, '5077746791634', 127, 2, 1, '', '/pic/no_image.png', '', 'А77')");
+                                                             "VALUES ('978-5-389-22224-3', 'Таланты умирают молодыми', 'Книжное', '84(5)', '82-9', 2023, '5077746791634', 127, 2, 1, '', '/pic/no_image.png', 'художественное', 'А77')");
                 cmdLvL2.ExecuteNonQuery();
 
                 cmdLvL2 = DBControl.GetCommand("INSERT INTO \"Issue\" (identifier, name, type, \"BBK\", \"UDK\", year, publisher, pagecount, storage, amount, annotation, image, keyword, authorsign) " +
-                                                             "VALUES ('978-5-389-24137-4', 'Перелётный гусь', 'Книжное', '84(5)', '82-9', 2023, '5077746791634', 119, 2, 1, '', '/pic/no_image.png', '', 'А77')");
+                                                             "VALUES ('978-5-389-24137-4', 'Перелётный гусь', 'Книжное', '84(5)', '82-9', 2023, '5077746791634', 119, 2, 1, '', '/pic/no_image.png', 'художественное', 'А77')");
                 cmdLvL2.ExecuteNonQuery();
 
                 cmdLvL2 = DBControl.GetCommand("INSERT INTO \"Issue\" (identifier, name, type, \"BBK\", \"UDK\", year, publisher, pagecount, storage, amount, annotation, image, keyword, authorsign) " +
-                                                             "VALUES ('978-5-389-22224-2', 'В преддверии праздника', 'Книжное', '84(5)', '82-9', 2023, '5077746791634', 122, 2, 2, '', '/pic/no_image.png', '', 'А77')");
+                                                             "VALUES ('978-5-389-22224-2', 'В преддверии праздника', 'Книжное', '84(5)', '82-9', 2023, '5077746791634', 122, 2, 2, '', '/pic/no_image.png', 'художественное', 'А77')");
                 cmdLvL2.ExecuteNonQuery();
 
                 cmdLvL2 = DBControl.GetCommand("INSERT INTO \"Issue\" (identifier, name, type, \"BBK\", \"UDK\", year, publisher, pagecount, storage, amount, annotation, image, keyword, authorsign) " +
@@ -506,6 +508,152 @@ namespace LibrISv2
                 cmdLvL2 = DBControl.GetCommand("INSERT INTO \"OperationStatus\" (status) VALUES ('Выдано')");
                 cmdLvL2.ExecuteNonQuery();
                 cmdLvL2 = DBControl.GetCommand("INSERT INTO \"OperationStatus\" (status) VALUES ('Забронировано')");
+                cmdLvL2.ExecuteNonQuery();
+            }
+            else reader.Close();
+        }
+        private void AddNumbers()
+        {
+            NpgsqlCommand cmdLvL1 = DBControl.GetCommand("SELECT * FROM \"Nums\"");
+            NpgsqlDataReader reader = cmdLvL1.ExecuteReader();
+            if (!reader.HasRows)
+            {
+                reader.Close();
+                NpgsqlCommand cmdLvL2 = DBControl.GetCommand("INSERT INTO \"Nums\" (book, num) VALUES ('978-5-87-107963-8', '100-а')");
+                cmdLvL2.ExecuteNonQuery();
+                cmdLvL2 = DBControl.GetCommand("INSERT INTO \"Nums\" (book, num) VALUES ('978-5-87-107963-8', '101-а')");
+                cmdLvL2.ExecuteNonQuery();
+                cmdLvL2 = DBControl.GetCommand("INSERT INTO \"Nums\" (book, num) VALUES ('978-5-87-107963-8', '102-а')");
+                cmdLvL2.ExecuteNonQuery();
+                cmdLvL2 = DBControl.GetCommand("INSERT INTO \"Nums\" (book, num) VALUES ('978-5-87-107963-8', '103-а')");
+                cmdLvL2.ExecuteNonQuery();
+                cmdLvL2 = DBControl.GetCommand("INSERT INTO \"Nums\" (book, num) VALUES ('978-5-87-107963-8', '104-а')");
+                cmdLvL2.ExecuteNonQuery();
+                cmdLvL2 = DBControl.GetCommand("INSERT INTO \"Nums\" (book, num) VALUES ('978-5-87-107963-8', '105-а')");
+                cmdLvL2.ExecuteNonQuery();
+
+                cmdLvL2 = DBControl.GetCommand("INSERT INTO \"Nums\" (book, num) VALUES ('978-5-389-22224-3', '110-а')");
+                cmdLvL2.ExecuteNonQuery();
+
+                cmdLvL2 = DBControl.GetCommand("INSERT INTO \"Nums\" (book, num) VALUES ('978-5-389-24137-4', '120-а')");
+                cmdLvL2.ExecuteNonQuery();
+
+                cmdLvL2 = DBControl.GetCommand("INSERT INTO \"Nums\" (book, num) VALUES ('978-5-389-22224-2', '130-а')");
+                cmdLvL2.ExecuteNonQuery();
+                cmdLvL2 = DBControl.GetCommand("INSERT INTO \"Nums\" (book, num) VALUES ('978-5-389-22224-2', '131-а')");
+                cmdLvL2.ExecuteNonQuery();
+
+                cmdLvL2 = DBControl.GetCommand("INSERT INTO \"Nums\" (book, num) VALUES ('978-5-488-01677-4', '200-б')");
+                cmdLvL2.ExecuteNonQuery();
+                cmdLvL2 = DBControl.GetCommand("INSERT INTO \"Nums\" (book, num) VALUES ('978-5-488-01677-4', '201-б')");
+                cmdLvL2.ExecuteNonQuery();
+                cmdLvL2 = DBControl.GetCommand("INSERT INTO \"Nums\" (book, num) VALUES ('978-5-488-01677-4', '202-б')");
+                cmdLvL2.ExecuteNonQuery();
+                cmdLvL2 = DBControl.GetCommand("INSERT INTO \"Nums\" (book, num) VALUES ('978-5-488-01677-4', '203-б')");
+                cmdLvL2.ExecuteNonQuery();
+                cmdLvL2 = DBControl.GetCommand("INSERT INTO \"Nums\" (book, num) VALUES ('978-5-488-01677-4', '204-б')");
+                cmdLvL2.ExecuteNonQuery();
+                cmdLvL2 = DBControl.GetCommand("INSERT INTO \"Nums\" (book, num) VALUES ('978-5-488-01677-4', '205-б')");
+                cmdLvL2.ExecuteNonQuery();
+                cmdLvL2 = DBControl.GetCommand("INSERT INTO \"Nums\" (book, num) VALUES ('978-5-488-01677-4', '206-б')");
+                cmdLvL2.ExecuteNonQuery();
+                cmdLvL2 = DBControl.GetCommand("INSERT INTO \"Nums\" (book, num) VALUES ('978-5-488-01677-4', '207-б')");
+                cmdLvL2.ExecuteNonQuery();
+                cmdLvL2 = DBControl.GetCommand("INSERT INTO \"Nums\" (book, num) VALUES ('978-5-488-01677-4', '208-б')");
+                cmdLvL2.ExecuteNonQuery();
+                cmdLvL2 = DBControl.GetCommand("INSERT INTO \"Nums\" (book, num) VALUES ('978-5-488-01677-4', '209-б')");
+                cmdLvL2.ExecuteNonQuery();
+                cmdLvL2 = DBControl.GetCommand("INSERT INTO \"Nums\" (book, num) VALUES ('978-5-488-01677-4', '210-б')");
+                cmdLvL2.ExecuteNonQuery();
+                cmdLvL2 = DBControl.GetCommand("INSERT INTO \"Nums\" (book, num) VALUES ('978-5-488-01677-4', '211-б')");
+                cmdLvL2.ExecuteNonQuery();
+
+                cmdLvL2 = DBControl.GetCommand("INSERT INTO \"Nums\" (book, num) VALUES ('978-5-117-06232-4', '300-в')");
+                cmdLvL2.ExecuteNonQuery();
+                cmdLvL2 = DBControl.GetCommand("INSERT INTO \"Nums\" (book, num) VALUES ('978-5-117-06232-4', '301-в')");
+                cmdLvL2.ExecuteNonQuery();
+                cmdLvL2 = DBControl.GetCommand("INSERT INTO \"Nums\" (book, num) VALUES ('978-5-117-06232-4', '302-в')");
+                cmdLvL2.ExecuteNonQuery();
+
+                cmdLvL2 = DBControl.GetCommand("INSERT INTO \"Nums\" (book, num) VALUES ('978-5-17-105970-5', '200-а')");
+                cmdLvL2.ExecuteNonQuery();
+                cmdLvL2 = DBControl.GetCommand("INSERT INTO \"Nums\" (book, num) VALUES ('978-5-17-105970-5', '201-а')");
+                cmdLvL2.ExecuteNonQuery();
+                cmdLvL2 = DBControl.GetCommand("INSERT INTO \"Nums\" (book, num) VALUES ('978-5-17-105970-5', '202-а')");
+                cmdLvL2.ExecuteNonQuery();
+                cmdLvL2 = DBControl.GetCommand("INSERT INTO \"Nums\" (book, num) VALUES ('978-5-17-105970-5', '203-а')");
+                cmdLvL2.ExecuteNonQuery();
+                cmdLvL2 = DBControl.GetCommand("INSERT INTO \"Nums\" (book, num) VALUES ('978-5-17-105970-5', '204-а')");
+                cmdLvL2.ExecuteNonQuery();
+
+                cmdLvL2 = DBControl.GetCommand("INSERT INTO \"Nums\" (book, num) VALUES ('978-5-9710-2758-4', '220-в')");
+                cmdLvL2.ExecuteNonQuery();
+                cmdLvL2 = DBControl.GetCommand("INSERT INTO \"Nums\" (book, num) VALUES ('978-5-9710-2758-4', '221-в')");
+                cmdLvL2.ExecuteNonQuery();
+                cmdLvL2 = DBControl.GetCommand("INSERT INTO \"Nums\" (book, num) VALUES ('978-5-9710-2758-4', '222-в')");
+                cmdLvL2.ExecuteNonQuery();
+                cmdLvL2 = DBControl.GetCommand("INSERT INTO \"Nums\" (book, num) VALUES ('978-5-9710-2758-4', '223-в')");
+                cmdLvL2.ExecuteNonQuery();
+                cmdLvL2 = DBControl.GetCommand("INSERT INTO \"Nums\" (book, num) VALUES ('978-5-9710-2758-4', '224-в')");
+                cmdLvL2.ExecuteNonQuery();
+                cmdLvL2 = DBControl.GetCommand("INSERT INTO \"Nums\" (book, num) VALUES ('978-5-9710-2758-4', '225-в')");
+                cmdLvL2.ExecuteNonQuery();
+                cmdLvL2 = DBControl.GetCommand("INSERT INTO \"Nums\" (book, num) VALUES ('978-5-9710-2758-4', '226-в')");
+                cmdLvL2.ExecuteNonQuery();
+
+                cmdLvL2 = DBControl.GetCommand("INSERT INTO \"Nums\" (book, num) VALUES ('978-5-04-111270-7', '230-г')");
+                cmdLvL2.ExecuteNonQuery();
+                cmdLvL2 = DBControl.GetCommand("INSERT INTO \"Nums\" (book, num) VALUES ('978-5-04-111270-7', '231-г')");
+                cmdLvL2.ExecuteNonQuery();
+                cmdLvL2 = DBControl.GetCommand("INSERT INTO \"Nums\" (book, num) VALUES ('978-5-04-111270-7', '232-г')");
+                cmdLvL2.ExecuteNonQuery();
+                cmdLvL2 = DBControl.GetCommand("INSERT INTO \"Nums\" (book, num) VALUES ('978-5-04-111270-7', '233-г')");
+                cmdLvL2.ExecuteNonQuery();
+
+                cmdLvL2 = DBControl.GetCommand("INSERT INTO \"Nums\" (book, num) VALUES ('978-5-4461-1426-9', '240-аб')");
+                cmdLvL2.ExecuteNonQuery();
+                cmdLvL2 = DBControl.GetCommand("INSERT INTO \"Nums\" (book, num) VALUES ('978-5-4461-1426-9', '241-аб')");
+                cmdLvL2.ExecuteNonQuery();
+                cmdLvL2 = DBControl.GetCommand("INSERT INTO \"Nums\" (book, num) VALUES ('978-5-4461-1426-9', '242-аб')");
+                cmdLvL2.ExecuteNonQuery();
+                cmdLvL2 = DBControl.GetCommand("INSERT INTO \"Nums\" (book, num) VALUES ('978-5-4461-1426-9', '243-аб')");
+                cmdLvL2.ExecuteNonQuery();
+                cmdLvL2 = DBControl.GetCommand("INSERT INTO \"Nums\" (book, num) VALUES ('978-5-4461-1426-9', '244-аб')");
+                cmdLvL2.ExecuteNonQuery();
+                cmdLvL2 = DBControl.GetCommand("INSERT INTO \"Nums\" (book, num) VALUES ('978-5-4461-1426-9', '245-аб')");
+                cmdLvL2.ExecuteNonQuery();
+                cmdLvL2 = DBControl.GetCommand("INSERT INTO \"Nums\" (book, num) VALUES ('978-5-4461-1426-9', '246-аб')");
+                cmdLvL2.ExecuteNonQuery();
+                cmdLvL2 = DBControl.GetCommand("INSERT INTO \"Nums\" (book, num) VALUES ('978-5-4461-1426-9', '247-аб')");
+                cmdLvL2.ExecuteNonQuery();
+                cmdLvL2 = DBControl.GetCommand("INSERT INTO \"Nums\" (book, num) VALUES ('978-5-4461-1426-9', '248-аб')");
+                cmdLvL2.ExecuteNonQuery();
+
+                cmdLvL2 = DBControl.GetCommand("INSERT INTO \"Nums\" (book, num) VALUES ('978-5-699-27868-8', '250-б')");
+                cmdLvL2.ExecuteNonQuery();
+                cmdLvL2 = DBControl.GetCommand("INSERT INTO \"Nums\" (book, num) VALUES ('978-5-699-27868-8', '251-б')");
+                cmdLvL2.ExecuteNonQuery();
+                cmdLvL2 = DBControl.GetCommand("INSERT INTO \"Nums\" (book, num) VALUES ('978-5-699-27868-8', '252-б')");
+                cmdLvL2.ExecuteNonQuery();
+
+                cmdLvL2 = DBControl.GetCommand("INSERT INTO \"Nums\" (book, num) VALUES ('978-5-17-148015-8', '260-а')");
+                cmdLvL2.ExecuteNonQuery();
+                cmdLvL2 = DBControl.GetCommand("INSERT INTO \"Nums\" (book, num) VALUES ('978-5-17-148015-8', '261-а')");
+                cmdLvL2.ExecuteNonQuery();
+                cmdLvL2 = DBControl.GetCommand("INSERT INTO \"Nums\" (book, num) VALUES ('978-5-17-148015-8', '262-а')");
+                cmdLvL2.ExecuteNonQuery();
+            }
+            else reader.Close();
+        }
+        private void AddOperation()
+        {
+            NpgsqlCommand cmdLvL1 = DBControl.GetCommand("SELECT * FROM \"Operation\"");
+            NpgsqlDataReader reader = cmdLvL1.ExecuteReader();
+            if (!reader.HasRows)
+            {
+                reader.Close();
+                NpgsqlCommand cmdLvL2 = DBControl.GetCommand("INSERT INTO \"Operation\" (client, issue, status, issuance, returningdate, num) " +
+                                                             "VALUES (132059, '978-5-488-01677-4', 'Выдано', '06.05.2024', '20.05.2024', '200-б')");
                 cmdLvL2.ExecuteNonQuery();
             }
             else reader.Close();

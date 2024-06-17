@@ -24,25 +24,31 @@ namespace LibrISv2
         private static DateTime returningDate;
         private static string now;
         private static string ret;
+        List<string> NumCheck = new List<string>();
+
         public WindowOperationSelector()
         {
             InitializeComponent();
+            DataContext = this;
             todayDate = DateTime.Today.Date;
             returningDate = todayDate.AddDays(14);
             now = todayDate.ToShortDateString();
             ret = returningDate.ToShortDateString();
+            LoadNums();
+            cbNum.SetBinding(ItemsControl.ItemsSourceProperty, new Binding() { Source = DBControl.Numbers });
         }
 
         // Кнопки
         private void bReturning_Click(object sender, RoutedEventArgs e)
         {
             if (PageControl.PageIssuance == null) return;
+
             Client client = (Client)PageControl.PageIssuance.lvClients.SelectedItem;
             Issue issue = (Issue)PageControl.PageIssuance.lvIssues.SelectedItem;
-            
+
             if (client != null && issue != null)
             {
-                if (tbNum.Text.Trim().Length > 0)
+                if (cbNum.SelectedIndex != -1)
                 {
                     int amount = OperationCheck(issue, client);
                     if (amount < 0)
@@ -54,7 +60,7 @@ namespace LibrISv2
                     {
                         if (UpdateOperation(issue, client))
                         {
-                            if (IssueAmountUpdate(issue, amount + 1))
+                            if (IssueAmountUpdate(issue, (amount + 1)))
                             {
                                 MessageBox.Show(now + " читателем " + client.Surname + " " + client.FirstName + " " + client.Patronymic +
                                                " возвращено издание " + issue.Name);
@@ -79,11 +85,15 @@ namespace LibrISv2
         private void bIssuance_Click(object sender, RoutedEventArgs e)
         {
             if (PageControl.PageIssuance == null) return;
+            DataLoad.LoadOperations();
+            NumsCheck();
+            if (NumCheck.Contains(((Nums)cbNum.SelectedItem as Nums).Num)) return;
+            
             Client client = (Client)PageControl.PageIssuance.lvClients.SelectedItem;
             Issue issue = (Issue)PageControl.PageIssuance.lvIssues.SelectedItem;
             if (client != null && issue != null)
             {
-                if (tbNum.Text.Trim().Length > 0)
+                if (cbNum.SelectedIndex != -1)
                 {
                     int amount = AvailabilityCheck(issue);
                     if (amount == 0)
@@ -97,7 +107,7 @@ namespace LibrISv2
                     }
                     if (amount > 0)
                     {
-                        if (IssueAmountUpdate(issue, amount - 1))
+                        if (IssueAmountUpdate(issue, (amount - 1)))
                         {
                             if (CreateOperation(issue, client))
                             {
@@ -129,7 +139,7 @@ namespace LibrISv2
         // Операции с БД
         private int AvailabilityCheck(Issue issue)
         {
-            NpgsqlCommand command = DBControl.GetCommand("SELECT \"Issue\".\"amount\" FROM \"Issue\" WHERE (\"identifier\" = @id AND \"amount\" > 0 AND \"storage\" = @thisDepartment)");
+            NpgsqlCommand command = DBControl.GetCommand("SELECT \"Issue\".\"amount\" FROM \"Issue\", \"Nums\" WHERE (\"identifier\" = @id AND \"amount\" > 0 AND \"storage\" = @thisDepartment AND \"Nums\".\"book\" = @id)");
             command.Parameters.AddWithValue("@id", NpgsqlDbType.Varchar, issue.Identifier);
             command.Parameters.AddWithValue("@thisDepartment", NpgsqlDbType.Integer, MainWindow.currentUserWorkplace);
             NpgsqlDataReader reader = command.ExecuteReader();
@@ -177,7 +187,7 @@ namespace LibrISv2
                 command.Parameters.AddWithValue("@status", NpgsqlDbType.Varchar, "Выдано");
                 command.Parameters.AddWithValue("@issuance", NpgsqlDbType.Date, todayDate);
                 command.Parameters.AddWithValue("@returning", NpgsqlDbType.Date, returningDate);
-                command.Parameters.AddWithValue("@num", NpgsqlDbType.Varchar, tbNum.Text.Trim());
+                command.Parameters.AddWithValue("@num", NpgsqlDbType.Varchar, ((Nums)cbNum.SelectedItem as Nums).Num);
                 int result = command.ExecuteNonQuery();
                 if (result == 1)
                 {
@@ -205,7 +215,7 @@ namespace LibrISv2
             command.Parameters.AddWithValue("@client", NpgsqlDbType.Varchar, client.LibCard);
             command.Parameters.AddWithValue("@status", NpgsqlDbType.Varchar, "Возвращено");
             command.Parameters.AddWithValue("@thisDepartment", NpgsqlDbType.Integer, MainWindow.currentUserWorkplace);
-            command.Parameters.AddWithValue("@num", NpgsqlDbType.Varchar, tbNum.Text.Trim());
+            command.Parameters.AddWithValue("@num", NpgsqlDbType.Varchar, ((Nums)cbNum.SelectedItem as Nums).Num);
             NpgsqlDataReader reader = command.ExecuteReader();
             if (!reader.HasRows)
             {
@@ -222,15 +232,35 @@ namespace LibrISv2
         }
         private bool UpdateOperation(Issue issue, Client client)
         {
-            NpgsqlCommand command = DBControl.GetCommand("UPDATE \"Operation\" SET status = @status WHERE client = @client AND issue = @issue AND num = @num");
+            //NpgsqlCommand command = DBControl.GetCommand("UPDATE \"Operation\" SET status = @status WHERE client = @client AND issue = @issue AND num = @num");
+            //try
+            //{
+            //    command.Parameters.AddWithValue("@client", NpgsqlDbType.Varchar, client.LibCard);
+            //    command.Parameters.AddWithValue("@issue", NpgsqlDbType.Varchar, issue.Identifier);
+            //    command.Parameters.AddWithValue("@status", NpgsqlDbType.Varchar, "Возвращено");
+            //    command.Parameters.AddWithValue("@num", NpgsqlDbType.Varchar, tbNum.Text.Trim());
+            //    int result = command.ExecuteNonQuery();
+            //    if (result == 1)
+            //    {
+            //        return true;
+            //    }
+            //    else
+            //    {
+            //        return false;
+            //    }
+            //}
+            //catch
+            //{
+            //    return false;
+            //}
+            NpgsqlCommand command = DBControl.GetCommand("DELETE FROM \"Operation\" WHERE client = @client AND issue = @issue AND num = @num");
             try
             {
                 command.Parameters.AddWithValue("@client", NpgsqlDbType.Varchar, client.LibCard);
                 command.Parameters.AddWithValue("@issue", NpgsqlDbType.Varchar, issue.Identifier);
-                command.Parameters.AddWithValue("@status", NpgsqlDbType.Varchar, "Возвращено");
-                command.Parameters.AddWithValue("@num", NpgsqlDbType.Varchar, tbNum.Text.Trim());
+                command.Parameters.AddWithValue("@num", NpgsqlDbType.Varchar, ((Nums)cbNum.SelectedItem as Nums).Num);
                 int result = command.ExecuteNonQuery();
-                if (result == 1)
+                if (result > 0)
                 {
                     return true;
                 }
@@ -242,6 +272,31 @@ namespace LibrISv2
             catch
             {
                 return false;
+            }
+        }
+        private void LoadNums()
+        {
+            Issue issue = (Issue)PageControl.PageIssuance.lvIssues.SelectedItem;
+            DBControl.Numbers.Clear();
+
+            NpgsqlCommand command = DBControl.GetCommand("SELECT \"Nums\".id, \"Nums\".book, \"Nums\".num FROM \"Nums\" WHERE \"Nums\".book = @book");
+            command.Parameters.AddWithValue("@book", NpgsqlDbType.Varchar, issue.Identifier);
+            NpgsqlDataReader reader = command.ExecuteReader();
+            if (reader.HasRows)
+            {
+                while (reader.Read())
+                {
+                    DBControl.Numbers.Add(new Nums(reader.GetInt32(0), reader.GetString(1), reader.GetString(2)));
+                }
+            }
+            reader.Close();
+        }
+        private void NumsCheck()
+        {
+            NumCheck.Clear();
+            foreach (var op in DBControl.Operations)
+            {
+                NumCheck.Add(op.ExtraNumber);
             }
         }
     }

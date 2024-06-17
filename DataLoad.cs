@@ -242,6 +242,7 @@ namespace LibrISv2
             reader.Close();
         }
         
+        
         // В текущей версии не используется
         //public static void LoadOperationStatuses()
         //{
