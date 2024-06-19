@@ -241,7 +241,30 @@ namespace LibrISv2
             }
             reader.Close();
         }
-        
+        public static void LoadCatalog()
+        {
+            DBControl.Cat.Clear();
+            NpgsqlCommand cmd = DBControl.GetCommand("SELECT \"Issue\".identifier, \"Issue\".name, \"Author\".surname, \"Author\".firstname, \"Author\".patronymic, \"Nums\".num, \"Author\".code " +
+                                                     "FROM \"Issue\", \"Author\", \"Nums\", \"Authorship\" " +
+                                                     "WHERE \"Issue\".identifier = \"Authorship\".issue " +
+                                                     "AND \"Author\".code = \"Authorship\".author " +
+                                                     "AND \"Issue\".identifier = \"Nums\".book " +
+                                                     "AND \"Issue\".storage = @workplace");
+            cmd.Parameters.AddWithValue("@workplace", NpgsqlDbType.Integer, MainWindow.currentUserWorkplace);
+            NpgsqlDataReader reader = cmd.ExecuteReader();
+            if (reader.HasRows)
+            {
+                while (reader.Read())
+                {
+                    DBControl.Cat.Add(new Catalog(reader.GetString(0),
+                                                  reader.GetString(1),
+                                                  reader.GetString(2).ToString() + " " + reader.GetString(3).ToString() + " " + reader.GetString(4),
+                                                  reader.GetString(5), 
+                                                  reader.GetInt32(6)));
+                }
+            }
+            reader.Close();
+        }
         
         // В текущей версии не используется
         //public static void LoadOperationStatuses()

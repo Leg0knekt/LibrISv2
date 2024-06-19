@@ -26,6 +26,7 @@ namespace LibrISv2
         {
             InitializeComponent();
             DataContext = this;
+            PageAddIssue.Numbers.Clear();
         }
 
         private void bNext_Click(object sender, RoutedEventArgs e)
@@ -47,11 +48,12 @@ namespace LibrISv2
         {
             if (tbNum.Text.Trim() != null && tbNum.Text.Trim() != string.Empty)
             {
-                NpgsqlCommand innercmd = DBControl.GetCommand("SELECT num FROM \"Nums\" WHERE book = @id");
-                innercmd.Parameters.AddWithValue("id", NpgsqlDbType.Varchar, tbNum.Text);
+                NpgsqlCommand innercmd = DBControl.GetCommand("SELECT num FROM \"Nums\" WHERE num = @num");
+                innercmd.Parameters.AddWithValue("num", NpgsqlDbType.Varchar, tbNum.Text.ToLower().Trim());
                 NpgsqlDataReader innerreader = innercmd.ExecuteReader();
                 if (!innerreader.HasRows)
                 {
+                    innerreader.Close();
                     PageAddIssue.Numbers.Add(tbNum.Text.ToLower().Trim());
                 }
                 innerreader.Close();

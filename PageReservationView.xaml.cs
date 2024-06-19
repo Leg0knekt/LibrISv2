@@ -1,4 +1,5 @@
-﻿using Microsoft.Win32;
+﻿using Microsoft.Office.Interop.Excel;
+using Microsoft.Win32;
 using Npgsql;
 using NpgsqlTypes;
 using System;
@@ -6,6 +7,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -17,12 +19,13 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Xml.Linq;
+using Excel = Microsoft.Office.Interop.Excel;
+using Binding = System.Windows.Data.Binding;
 
 namespace LibrISv2
 {
-    public partial class PageReservationView : Page
+    public partial class PageReservationView : System.Windows.Controls.Page
     {
-        public static SaveFileDialog saveFileDialog = new SaveFileDialog();
         public static ObservableCollection<ReportBooks> Books { get; set; } = new ObservableCollection<ReportBooks>();
         public static ObservableCollection<string> Keys { get; set; } = new ObservableCollection<string>();
         public static ComboBox cb;
@@ -130,9 +133,53 @@ namespace LibrISv2
         }
         private void bPrint_Click(object sender, RoutedEventArgs e)
         {
-            saveFileDialog.Filter = "doc files (*.doc)|*.doc|All files (*.*)|*.*";
-            saveFileDialog.ShowDialog();
-            // 4 часа утра, я хочу спать :(
+            //saveFileDialog.Filter = "doc files (*.doc)|*.doc|All files (*.*)|*.*";
+            //saveFileDialog.ShowDialog();
+            //// 4 часа утра, я хочу спать :(
+            
+            Excel.Application excelApp = new Excel.Application();
+            Excel.Workbook excelWorkbook = excelApp.Workbooks.Add();
+            Excel.Worksheet worksheet = excelWorkbook.ActiveSheet;
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "Новая книга Excel (*.xlsx)|*.xlsx|All files (*.*)|*.*";
+            saveFileDialog.Title = "Сохранить отчет...";
+
+            if (saveFileDialog.ShowDialog() != null)
+            {
+                Excel.Worksheet exWSheet = excelWorkbook.Sheets[1];
+
+                int row = 2;
+                foreach (ReportBooks book in lvReportBooks.Items)
+                {
+                    worksheet.Cells[row, 1] = book.Id;
+                    worksheet.Cells[row, 2] = book.Name;
+                    worksheet.Cells[row, 3] = book.Amount;
+                    worksheet.Cells[row, 4] = book.Keyword;
+                    row++;
+                }
+                worksheet.Cells[1, 1] = "ISBN";
+                worksheet.Columns[1].ColumnWidth = 17;
+
+                worksheet.Cells[1, 2] = "Название";
+                worksheet.Columns[2].ColumnWidth = 30;
+
+                worksheet.Cells[1, 3] = "Кол-во";
+                worksheet.Columns[3].ColumnWidth = 6;
+
+                worksheet.Cells[1, 4] = "Тематика";
+                worksheet.Columns[4].ColumnWidth = 20;
+
+                worksheet.Cells[1, 5] = "КО";
+                worksheet.Cells[2, 5] = tbCoeff.Text;
+                worksheet.Columns[5].ColumnWidth = 8;
+
+                Excel.Range range = worksheet.UsedRange;
+                Excel.Borders borders = range.Borders;
+
+                excelWorkbook.SaveAs(saveFileDialog.FileName);
+                excelWorkbook.Close();
+            }
+            
         }
     }
 }

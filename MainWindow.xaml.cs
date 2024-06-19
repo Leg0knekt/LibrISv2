@@ -54,7 +54,8 @@ namespace LibrISv2
                 // Если файл настроек не найден, попытается подключиться с дефолтными настройками.
                 try
                 {
-                    DBControl.Connect("192.168.1.214", "5432", "postgres", "libraryis", "1234");
+                    //DBControl.Connect("192.168.1.214", "5432", "postgres", "libraryis", "1234");
+                    DBControl.Connect("87.242.100.72", "5432", "postgres", "dblib", "08xa521");
                     AppFrame.Navigate(PageControl.PageAuth);
                 }
                 catch
@@ -653,7 +654,7 @@ namespace LibrISv2
             {
                 reader.Close();
                 NpgsqlCommand cmdLvL2 = DBControl.GetCommand("INSERT INTO \"Operation\" (client, issue, status, issuance, returningdate, num) " +
-                                                             "VALUES (132059, '978-5-488-01677-4', 'Выдано', '06.05.2024', '20.05.2024', '200-б')");
+                                                             "VALUES (132059, '978-5-488-01677-4', 'Выдано', '2024-05-06', '2024-05-20', '200-б')");
                 cmdLvL2.ExecuteNonQuery();
             }
             else reader.Close();

@@ -33,6 +33,7 @@ namespace LibrISv2
         }
 
         public static ObservableCollection<Author> Authors { get; set; } = new ObservableCollection<Author>();
+        public static ObservableCollection<Catalog> Cat { get; set; } = new ObservableCollection<Catalog>();
         public static ObservableCollection<Client> Clients { get; set; } = new ObservableCollection<Client>();
         public static ObservableCollection<DecimalClassification> DecClassifications { get; set; } = new ObservableCollection<DecimalClassification>();
         public static ObservableCollection<Department> Departments { get; set; } = new ObservableCollection<Department>();

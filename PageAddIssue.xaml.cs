@@ -31,6 +31,7 @@ namespace LibrISv2
         public static int thisBookAmount;
         public ObservableCollection<Author> SelectedAuthors = new ObservableCollection<Author>();
         public static List<string> Numbers = new List<string>();
+        private bool addCheck = false;
         public PageAddIssue()
         {
             InitializeComponent();
@@ -46,6 +47,7 @@ namespace LibrISv2
             cbUDK.SetBinding(ItemsControl.ItemsSourceProperty, new Binding() { Source = DBControl.DecClassifications });
             thisBook = string.Empty;
             thisBookAmount = 0;
+            addCheck = false;
         }
 
         // Фильтрация
@@ -174,8 +176,15 @@ namespace LibrISv2
 
                 thisBook = tbID.Text.Trim();
                 thisBookAmount = amountChecked;
-                WindowAddNum windowAddNum = new WindowAddNum();
-                windowAddNum.Show();
+                if (addCheck == false)
+                {
+                    WindowAddNum windowAddNum = new WindowAddNum();
+                    windowAddNum.Show();
+                }
+                else
+                {
+                    addCheck = false;
+                }
             }
         }
         private void bAddAuthor_Click(object sender, RoutedEventArgs e)
@@ -194,6 +203,10 @@ namespace LibrISv2
             tbFilter.Foreground = Brushes.LightSlateGray;
         }
         private void bClear_Click(object sender, RoutedEventArgs e)
+        {
+            ClearFields();
+        }
+        private void ClearFields()
         {
             tbAmount.Text = "В наличии";
             tbAmount.Foreground = Brushes.LightSlateGray;
@@ -239,7 +252,6 @@ namespace LibrISv2
             lvAuthors.BorderBrush = Brushes.LightSlateGray;
             lvAuthors.IsEnabled = false;
         }
-
         //
         public static void CreateNumbers()
         {
@@ -268,6 +280,7 @@ namespace LibrISv2
             {
                 case true:
                     MessageBox.Show("Добавлено книг: " + thisBookAmount);
+                    Numbers.Clear();
                     break;
                 case false:
                     NpgsqlCommand del1 = DBControl.GetCommand("DELETE FROM \"Authorship\" WHERE issue = @id");
@@ -345,12 +358,13 @@ namespace LibrISv2
                                     result = command.ExecuteNonQuery();
                                     if (result < 1)
                                     {
-                                        
+
                                     }
                                 }
                                 catch (Exception ax)
                                 {
                                     MessageBox.Show("Ошибка установления авторства\n" + ax);
+                                    return;
                                 }
                             }
                             //bClear_Click(sender, e);
@@ -368,7 +382,14 @@ namespace LibrISv2
                     return;
                 }
             }
-            else MessageBox.Show("Данное издание уже есть в списке");
+            else
+            {
+                precmd = null;
+                ClearFields();
+                MessageBox.Show("Данное издание уже есть в списке");
+                addCheck = true;
+                return;
+            }
         }
         // Изменение выбора ComboBox и ListView
         private void lvAuthors_SelectionChanged(object sender, SelectionChangedEventArgs e)
