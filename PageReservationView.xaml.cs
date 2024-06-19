@@ -133,10 +133,6 @@ namespace LibrISv2
         }
         private void bPrint_Click(object sender, RoutedEventArgs e)
         {
-            //saveFileDialog.Filter = "doc files (*.doc)|*.doc|All files (*.*)|*.*";
-            //saveFileDialog.ShowDialog();
-            //// 4 часа утра, я хочу спать :(
-            
             Excel.Application excelApp = new Excel.Application();
             Excel.Workbook excelWorkbook = excelApp.Workbooks.Add();
             Excel.Worksheet worksheet = excelWorkbook.ActiveSheet;
@@ -179,7 +175,7 @@ namespace LibrISv2
                 excelWorkbook.SaveAs(saveFileDialog.FileName);
                 excelWorkbook.Close();
             }
-            
+            excelApp.Quit();
         }
     }
 }
